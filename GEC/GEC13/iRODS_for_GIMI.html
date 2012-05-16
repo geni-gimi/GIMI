@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="Content-Type">
+  <title>OMNI for GIMI</title>
+</head>
+<body>
+<pre style="font-family: Times New Roman,Times,serif;"><big
+ style="font-weight: bold;"><big>Tutorial on how to setup iRODS for use within GIMI</big></big><br><br>This page describes the installation steps required to setup and Integrated Rule-Oriented Data System <br>(iRODS) server for the GIMI project. <br><br>General information on iRODS can be found <a
+ href="https://www.irods.org/">here</a>.<br><br>Here are the steps necessary to perform the installation:<br></pre>
+<ol>
+  <li>Install iRODS as described under "Quick Start iRODS Install
+Instructions"at the following link:<br>
+    <a href="https://www.irods.org/index.php/Installation">https://www.irods.org/index.php/Installation</a><br>
+    <br>
+    <br>
+    <br>
+  </li>
+  <li>Configure iRODS server by running "irodssetup" in the root
+directory of your iRODS installation.<br>
+Note iCAT does not have to be installed since RENCI runs iCAT on its
+iRODS server.<br>
+The hostname for the RENCI iRODS server is: geni-gimi.renci.org<br>
+    <span style="color: rgb(255, 102, 102);">Make sure to contact Shu
+Huang (shuang@renci.org) to make sure RENCI's firewall is </span><br
+ style="color: rgb(255, 102, 102);">
+    <span style="color: rgb(255, 102, 102);">configured to allow your
+server to connect to geni-gimi.renci.org<br>
+    <br>
+    <span style="color: rgb(0, 0, 0);">Here's the server section from
+config/irods.config on the UMass server:<br>
+    <small><span style="font-family: Courier New,Courier,monospace;">$IRODS_HOME
+= '/nfs/emmy8/scratch3/iRODS';</span><br
+ style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$IRODS_PORT
+= '1247';</span><br style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$SVR_PORT_RANGE_START
+= '20000';</span><br style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$SVR_PORT_RANGE_END
+= '20199';</span><br style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$IRODS_ADMIN_NAME
+= 'rods';</span><br style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$IRODS_ADMIN_PASSWORD
+= 'rods';</span><br style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$IRODS_ICAT_HOST
+= 'geni-gimi.renci.org';</span><br
+ style="font-family: Courier New,Courier,monospace;">
+    <br style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$DB_NAME
+= 'ICAT';</span><br style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$RESOURCE_NAME
+= 'iRODSUmass';</span><br
+ style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$RESOURCE_DIR
+= '/nfs/emmy8/scratch3/iRODS/Vault';</span><br
+ style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$ZONE_NAME
+= 'geniRenci';</span><br
+ style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$DB_KEY =
+'123';</span><br style="font-family: Courier New,Courier,monospace;">
+    <br style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$GSI_AUTH
+= '0';</span><br style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$GLOBUS_LOCATION
+= '';</span><br style="font-family: Courier New,Courier,monospace;">
+    <span style="font-family: Courier New,Courier,monospace;">$GSI_INSTALL_TYPE
+= '';</span></small><br>
+    <br>
+    </span></span></li>
+  <li><span style="color: rgb(255, 102, 102);"><span
+ style="color: rgb(0, 0, 0);">Start your local&nbsp; iRODS server with
+"irodsctl start".<br>
+("irodsctrl stop" will shut it down.)<br>
+    <br>
+    </span></span></li>
+  <li><span style="color: rgb(255, 102, 102);"><span
+ style="color: rgb(0, 0, 0);"><span
+ style="font-family: Courier New,Courier,monospace;">iadmin</span> is
+the command line administration tool for iRODS<br>
+    </span></span></li>
+</ol>
+Getting files in and out of iRODS:<br>
+<br>
+<ol>
+  <li>iRODS client commandsa can be found at:<br>
+    <span style="font-family: Courier New,Courier,monospace;">iRODS/clients/icommands/bin<br>
+    <br>
+    </span></li>
+  <li><span style="font-family: Courier New,Courier,monospace;">ihelp</span>
+lists and briefly explains all available client commands. Help for this
+command can also be <br>
+found online <a href="https://www.irods.org/index.php/icommands">here</a>.<br>
+    <br>
+    <br>
+  </li>
+  <li>Example: A simple way to add a file into iRODS is <a
+ href="https://www.irods.org/index.php/iput">iput</a>.<br>
+  </li>
+</ol>
+<pre style="font-family: Times New Roman,Times,serif;"><br></pre>
+<br>
+</body>
+</html>
