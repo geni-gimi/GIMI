@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rspec type="request"
+        xsi:schemaLocation="http://www.geni.net/resources/rspec/3
+                            http://www.geni.net/resources/rspec/3/request.xsd
+                            http://www.protogeni.net/resources/rspec/ext/shared-vlan/1
+                            http://www.protogeni.net/resources/rspec/ext/shared-vlan/1/request.xsd"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:s="http://www.protogeni.net/resources/rspec/ext/shared-vlan/1"
+        xmlns="http://www.geni.net/resources/rspec/3">
+  <node client_id="NodeA" >
+    <sliver_type name="c1.xlarge">
+   <disk_image name="http://pkg.mytestbed.net/geni/gec15-nicta-1.xml" version="51838b0d77fcf8840624bdc150ac51331f84a524" />
+    </sliver_type>
+    <interface client_id="NodeA:if0">
+   <ip address="192.168.4.11" netmask="255.255.255.0" />
+    </interface>
+    <interface client_id="NodeA:if1">
+   <ip address="192.168.5.11" netmask="255.255.255.0" />
+    </interface>
+    <services>
+      <execute command="wget -q -P /tmp http://emmy9.casa.umass.edu/GEC15-GIMI-Tutorial/gec15-postboot.sh ;chmod +x /tmp/gec15-postboot.sh;/tmp/gec15-postboot.sh SLICENAME nodeA > /tmp/gec15-postboot.log" shell="/bin/sh"/>
+    </services>
+  </node>
+  <node client_id="NodeB" >
+    <sliver_type name="c1.xlarge">
+   <disk_image name="http://pkg.mytestbed.net/geni/gec15-nicta-1.xml" version="51838b0d77fcf8840624bdc150ac51331f84a524" />
+    </sliver_type>
+    <interface client_id="NodeB:if0">
+   <ip address="192.168.4.10" netmask="255.255.255.0" />
+    </interface>
+    <interface client_id="NodeB:if1">
+   <ip address="192.168.2.10" netmask="255.255.255.0" />
+    </interface>
+    <interface client_id="NodeB:if2">
+   <ip address="192.168.1.10" netmask="255.255.255.0" />
+    </interface>
+    <services>
+      <execute command="wget -q -P /tmp http://emmy9.casa.umass.edu/GEC15-GIMI-Tutorial/gec15-postboot.sh ;chmod +x /tmp/gec15-postboot.sh;/tmp/gec15-postboot.sh SLICENAME nodeB > /tmp/gec15-postboot.log" shell="/bin/sh"/>
+    </services>
+  </node>
+  <node client_id="NodeC" >
+    <sliver_type name="c1.xlarge">
+   <disk_image name="http://pkg.mytestbed.net/geni/gec15-nicta-1.xml" version="51838b0d77fcf8840624bdc150ac51331f84a524" />
+    </sliver_type>
+    <interface client_id="NodeC:if0">
+   <ip address="192.168.5.12" netmask="255.255.255.0" />
+    </interface>
+    <interface client_id="NodeC:if1">
+   <ip address="192.168.2.12" netmask="255.255.255.0" />
+    </interface>
+    <interface client_id="NodeC:if2">
+   <ip address="192.168.3.12" netmask="255.255.255.0" />
+    </interface>
+    <interface client_id="NodeC:if3">
+   <ip address="192.168.6.12" netmask="255.255.255.0" />
+    </interface>
+    <services>
+      <execute command="wget -q -P /tmp http://emmy9.casa.umass.edu/GEC15-GIMI-Tutorial/gec15-postboot.sh ;chmod +x /tmp/gec15-postboot.sh;/tmp/gec15-postboot.sh SLICENAME nodeC > /tmp/gec15-postboot.log" shell="/bin/sh"/>
+    </services>
+  </node>
+  <node client_id="NodeD" >
+    <sliver_type name="c1.xlarge">
+   <disk_image name="http://pkg.mytestbed.net/geni/gec15-nicta-1.xml" version="51838b0d77fcf8840624bdc150ac51331f84a524" />
+    </sliver_type>
+    <interface client_id="NodeD:if0">
+   <ip address="192.168.1.13" netmask="255.255.255.0" />
+    </interface>
+    <interface client_id="NodeD:if1">
+   <ip address="192.168.3.13" netmask="255.255.255.0" />
+    </interface>
+    <services>
+      <execute command="wget -q -P /tmp http://emmy9.casa.umass.edu/GEC15-GIMI-Tutorial/gec15-postboot.sh ;chmod +x /tmp/gec15-postboot.sh;/tmp/gec15-postboot.sh SLICENAME nodeD > /tmp/gec15-postboot.log" shell="/bin/sh"/>
+    </services>
+  </node>
+  <node client_id="NodeE" >
+    <sliver_type name="c1.xlarge">
+   <disk_image name="http://pkg.mytestbed.net/geni/gec15-nicta-1.xml" version="51838b0d77fcf8840624bdc150ac51331f84a524" />
+    </sliver_type>
+    <interface client_id="NodeE:if0">
+   <ip address="192.168.6.14" netmask="255.255.255.0" />
+    </interface>
+    <services>
+      <execute command="wget -q -P /tmp http://emmy9.casa.umass.edu/GEC15-GIMI-Tutorial/gec15-postboot.sh ;chmod +x /tmp/gec15-postboot.sh;/tmp/gec15-postboot.sh SLICENAME nodeE > /tmp/gec15-postboot.log" shell="/bin/sh"/>
+    </services>
+  </node>
+  <link client_id="link1">
+    <interface_ref client_id="NodeB:if2"/>
+    <interface_ref client_id="NodeD:if0"/>
+    <property source_id="NodeB:if2" dest_id="NodeD:if0" />
+    <property source_id="NodeD:if0" dest_id="NodeB:if2" />
+    <link_type name="lan"/>
+  </link>
+  <link client_id="link2">
+    <interface_ref client_id="NodeB:if1"/>
+    <interface_ref client_id="NodeC:if1"/>
+    <property source_id="NodeB:if1" dest_id="NodeC:if1" />
+    <property source_id="NodeC:if1" dest_id="NodeB:if1" />
+    <link_type name="lan"/>
+  </link>
+  <link client_id="link3">
+    <interface_ref client_id="NodeC:if2"/>
+    <interface_ref client_id="NodeD:if1"/>
+    <property source_id="NodeC:if2" dest_id="NodeD:if1" />
+    <property source_id="NodeD:if1" dest_id="NodeC:if2" />
+    <link_type name="lan"/>
+  </link>
+  <link client_id="link4">
+    <interface_ref client_id="NodeA:if0"/>
+    <interface_ref client_id="NodeB:if0"/>
+    <property source_id="NodeA:if0" dest_id="NodeB:if0" />
+    <property source_id="NodeB:if0" dest_id="NodeA:if0" />
+    <link_type name="lan"/>
+  </link>
+  <link client_id="link5">
+    <interface_ref client_id="NodeA:if1"/>
+    <interface_ref client_id="NodeC:if0"/>
+    <property source_id="NodeA:if1" dest_id="NodeC:if0" />
+    <property source_id="NodeC:if0" dest_id="NodeA:if1" />
+    <link_type name="lan"/>
+  </link>
+  <link client_id="link6">
+    <interface_ref client_id="NodeC:if3"/>
+    <interface_ref client_id="NodeE:if0"/>
+    <property source_id="NodeC:if3" dest_id="NodeE:if0" />
+    <property source_id="NodeE:if0" dest_id="NodeC:if3" />
+    <link_type name="lan"/>
+  </link>
+</rspec>
