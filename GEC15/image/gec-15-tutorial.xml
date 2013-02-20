@@ -1,0 +1,17 @@
+<images> 	     
+     <image>
+          <type>ZFILESYSTEM</type>
+          <signature>9076ffcf8a63b215a156c1216223bb5348175525</signature>
+          <url>http://emmy9.casa.umass.edu/GEC14-GIMI-Tutorial/umass.irods.v0.1.tgz</url>
+     </image>
+     <image>
+          <type>KERNEL</type>
+          <signature>93388c7b240e58635ccaa2e4bb7d5bee70b25b51</signature>
+          <url>http://emmy9.casa.umass.edu/GEC14-GIMI-Tutorial/vmlinuz-2.6.32-5-amd64</url>
+     </image>
+     <image>
+	<type>RAMDISK</type>
+	<signature>9cb7bcbd7fab306baa6a21bcada107bfcd752a33</signature>
+	<url>http://emmy9.casa.umass.edu/GEC15-GIMI-Tutorial/initrd.img-2.6.32-5-amd64</url>
+     </image>
+</images>
