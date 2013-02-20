@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="Content-Type">
+  <title>OMNI for GIMI</title>
+</head>
+<body>
+<pre style="font-family: Times New Roman,Times,serif;"><big
+ style="font-weight: bold;"><big>Tutorial to use OMNI with GENI resources for GIMI demo</big></big><br><br>OMNI is a common tool used to create slices and slivers on GENI resources such as protoGENI,<br>PlanetLab, ORCA, OpenFlow etc., In this tutorial we will go through the steps required to <br>use OMNI to access these resources. <br><br></pre>
+<ol>
+  <li>
+    <pre><big><span style="font-family: Times New Roman,Times,serif;">We need the latest verison of OMNI installed. OMNI client is part of the GENI Control </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">Framework (GCF) software package. You can obtian the GCF package at the following link:</span></big><br><a
+ href="http://trac.gpolab.bbn.com/gcf/wiki/GettingGcf"><br>http://trac.gpolab.bbn.com/gcf/wiki/GettingGcf</a><br><br><big><span
+ style="font-family: Times New Roman,Times,serif;">Install the GCF package obtained using the Quick Start instructions in the following link:</span><br
+ style="font-family: Times New Roman,Times,serif;"></big><br>http://trac.gpolab.bbn.com/gcf/wiki/QuickStart</pre>
+  </li>
+  <li>
+    <pre><big><span style="font-family: Times New Roman,Times,serif;">Next, we need proper credentials to access GENI resources usign OMNI. There are two </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">different credentials used to access GENI aggregates. One is the GPO credentials which can </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">be obtained by applying at the following link:</span></big><br><br><a
+ href="https://www.pgeni.gpolab.bbn.com/">https://www.pgeni.gpolab.bbn.com/</a> <br><br><big><span
+ style="font-family: Times New Roman,Times,serif;">You need to fill out the form, providing details of the project for which you are using </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">the GENI resources etc., and the GPO will accept the application and provide access.</span><br
+ style="font-family: Times New Roman,Times,serif;"><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">The other credentials used is the Emulab credentials, which can be obtained by applying </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">at the following link:</span></big><br><br><a
+ href="https://www.emulab.net/">https://www.emulab.net/ </a><br><br><big><span
+ style="font-family: Times New Roman,Times,serif;">Though the above two forms look similar, they are two different credentials and you should </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">be careful in differentiating the two credentials for usage when accessing GENI resources. </span><br
+ style="font-family: Times New Roman,Times,serif;"><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">GPO credentials can be used to access all GENI aggregates except ORCA resources for now, </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">but Emulab credentials can be used to access all GENI aggregtaes. So, I suggets you use only </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">Emulab credentials for the experiments to access GENI resources. </span></big></pre>
+  </li>
+  <li>
+    <pre><big><span style="font-family: Times New Roman,Times,serif;">Once you obtain the account on Emulab testbed. On your home page, there is a link </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">"Generare SSL" which allows you to create a SSL certificate needed to access GENI reources. </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">Click on that link and generate a SSL certificate with a password of your choice. Then, there </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">is separate link "Download SSL" to download the certificate to your ".ssl" folder. Please </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">store it in a folder which you can remember and rename the certificate appropriately (either </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">emulab or gpo) to differentiate the different certificates to avoid confusion later. You will </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">be asked to provide the password everytime you use the credentials to access GENI resources </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">using OMNI. To avoid this, please remove the password from your certificate using the </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">instructions provided at the following link:</span></big><br><br><a
+ href="http://groups.geni.net/geni/wiki/GENIExperimenter/ExperimentCredentials">http://groups.geni.net/geni/wiki/GENIExperimenter/ExperimentCredentials</a></pre>
+  </li>
+  <li>
+    <pre style="font-family: Times New Roman,Times,serif;">With the credentials obtianed from the previous step, we would be set to use OMNI for <br>accessing GENI resources. In the following steps, we will go through the config file and <br>commands to access protoGENI, PlanetLab and ORCA aggregates.<br></pre>
+    <ul>
+      <li>
+        <pre><big><span
+ style="font-weight: bold; font-family: Times New Roman,Times,serif;">protoGENI:</span><span
+ style="font-family: Times New Roman,Times,serif;"> Below are the commands and config file to access protoGENI resources.</span><br
+ style="font-family: Times New Roman,Times,serif;"><br
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 102, 255);"><span
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);">Create a "omni_config" file, to set the credentials configuration to access the </span><br
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);"><span
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);">GENI aggregates. I suggest you create separate config files for each GENI aggregate. </span><br
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);"><span
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);">So, "omni_config_pgeni" is the config file we will use for protoGENI aggregate access. </span><br
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);"><span
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);">Below is the config file details for my account. You should change it accordingly, </span><br
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);"><span
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);">depending on your username and credentials path.</span></big><br
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);"><br>[omni]<br>default_cf = pgeni<br>users = dkumar<br><br># ---------- Users ----------<br>[dkumar]<br>urn = urn:publicid:IDN+pgeni.gpolab.bbn.com+user+dkumar<br>keys = ~/.ssh/protogeni.pub<br><br># ---------- Frameworks ----------<br>[pgeni]<br>type = pg<br>ch = https://www.emulab.net:443/protogeni/xmlrpc/ch<br>sa = https://www.pgeni.gpolab.bbn.com:443/protogeni/xmlrpc/sa<br>cert = ~/.ssl/emulab_cleartext.pem<br>key = ~/.ssl/emulab_cleartext.pem<br>verbose=false<br><br>[emulab]<br>type = pg<br>ch = https://www.emulab.net:443/protogeni/xmlrpc/ch<br>sa = https://www.emulab.net:443/protogeni/xmlrpc/sa<br>cert = ~/.ssl/emulab_cleartext.pem<br>key = ~/.ssl/emulab_cleartext.pem<br><br><big
+ style="color: rgb(51, 204, 255);"><span
+ style="font-family: Times New Roman,Times,serif;">Below are the commands used to access protoGENI resources using OMNI. </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">You have to run these commands from the gcf package folder you downloaded </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">earlier. You need to save the config file in that folder.</span></big><br><br>#list resources<br><br>./src/omni.py -c omni_config_pgeni -a https://www.emulab.net/protogeni/xmlrpc/am -o -t ProtoGENI 2 listresources<br><br>#create slice<br><br>./src/omni.py -c omni_config_pgeni -a https://www.emulab.net/protogeni/xmlrpc/am createslice "slice_name"<br><br>Note: when providing "slice_name" never use "underscore" character in the name. It doesn't work.<br><br>#renew slice<br><br>./src/omni.py -c omni_config_pgeni -a https://www.emulab.net/protogeni/xmlrpc/am renewslice "slice_name" "renew_date"<br><br>#create slivers<br><br>./src/omni.py -c omni_config_pgeni -a https://www.emulab.net/protogeni/xmlrpc/am createsliver "slice_name" "Rspec_file"<br><br>#sliver status<br><br>./src/omni.py -c omni_config_pgeni -a https://www.emulab.net/protogeni/xmlrpc/am sliverstatus "slice_name"<br><br>#delete sliver<br><br>./src/omni.py -c omni_config_pgeni -a https://www.emulab.net/protogeni/xmlrpc/am deletesliver "slice_name" <br><big><br><span
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);">Example Rspec file for accessing protoGENI resources is given below:</span></big><br
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);"><br>&lt;?xml version="1.0" ?&gt;<br>&lt;!-- Resources at AM:<br>        URN: unspecified_AM_URN<br>        URL: https://www.emulab.net/protogeni/xmlrpc/am<br> --&gt;<br>&lt;rspec type="request" xmlns="http://www.protogeni.net/resources/rspec/2" xmlns:emulab="http://www.protogeni.net/resources/rspec/ext/emulab/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.protogeni.net/resources/rspec/2 http://www.protogeni.net/resources/rspec2/request.xsd http://www.protogeni.net/resources/rspec/ext/emulab/1 http://www.protogeni.net/resources/rspec/ext/emulab/1/ptop_extension.xsd"&gt;<br>  &lt;node client_id="geni1"<br>        exclusive="true"&gt;<br>    &lt;sliver_type name="raw-pc" /&gt;<br>  &lt;/node&gt;<br>  &lt;node client_id="geni2"<br>        exclusive="true"&gt;<br>    &lt;sliver_type name="raw-pc" /&gt;<br>  &lt;/node&gt;<br>&lt;/rspec&gt;<br></pre>
+      </li>
+      <li>
+        <pre><big><span
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-weight: bold;">PlanetLab:</span> Below are the commands and config file to access PlanetLab resources.</span><br
+ style="font-family: Times New Roman,Times,serif;"><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);">Below is the config file (omni_config_plab) details to access PlanetLab account. </span><br
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);"><span
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);">You cannot create a slice if you do not have a PI account on PlanetLab. So, you </span><br
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);"></big><span
+ style="font-family: Times New Roman,Times,serif;"><big
+ style="color: rgb(51, 204, 255);">need to have a slice already in your account to access PlanetLab nodes.</big><br><br></span>[omni]<br>default_cf = plc<br>users = dilip_manu<br><br># ---------- Users ----------<br>[dilip_manu]<br>urn = urn:publicid:IDN+pgeni.gpolab.bbn.com+user+dilip_manu<br>keys = ~/.ssh/dilip.manu.pkey.pub<br><br># ---------- Frameworks ----------<br>[plc]<br>type=sfa<br>authority=plc.umass<br>user=plc.umass.dilip_manu<br>cert=~/.gcf/plc.umass.dilip_manu.gid<br>key=~/.ssh/dilip.manu.pkey<br>registry=http://www.planet-lab.org:12345<br>slicemgr=http://www.planet-lab.org:1234<br><big
+ style="color: rgb(51, 204, 255);"><br><span
+ style="font-family: Times New Roman,Times,serif;">The GID file will be automatically created the first time you access PlanetLab nodes. </span><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">You need to provide the password while executing OMNI commands to access PlanetLab nodes.</span><br
+ style="font-family: Times New Roman,Times,serif;"><br
+ style="font-family: Times New Roman,Times,serif;"><span
+ style="font-family: Times New Roman,Times,serif;">Below are the commands used to access PlanetLab resources using OMNI. </span></big><br><br>#list resources<br><br>./src/omni.py -c omni_config_plab -o -a http://www.planet-lab.org:12346 -t geni 3 --api-version 2 listresources<br><br># create sliver <br><br>#only PI can create slice on planetLab<br><br>./src/omni.py -c omni_config_plab -a http://www.planet-lab.org:12346 -o createsliver --api-version 2  "slice_name" "Rspec_file"<br>    <br>#sliver status<br><br>./src/omni.py -c omni_config_plab -a http://www.planet-lab.org:12346 -o sliverstatus -t geni 3 --api-version 2 "slice_name"<br><br><big
+ style="color: rgb(51, 204, 255);"><br
+ style="font-family: Times New Roman,Times,serif;"></big><span
+ style="font-family: Times New Roman,Times,serif;"><big
+ style="color: rgb(51, 204, 255);">Sample Rspec file to access PlanetLab nodes is given below</big><br></span><br>&lt;?xml version="1.0"?&gt;<br>&lt;RSpec type="SFA"&gt;<br>  &lt;network name="plc"&gt;<br>    &lt;site id="s4"&gt;<br>      &lt;name&gt;Kentucky&lt;/name&gt;<br>      &lt;node id="n73"&gt;<br>        &lt;hostname&gt;planetlab1.netlab.uky.edu&lt;/hostname&gt;<br>        &lt;bw_limit units="kbps"&gt;100000&lt;/bw_limit&gt;<br>        &lt;sliver /&gt;<br>      &lt;/node&gt;<br>    &lt;/site&gt;<br>    &lt;site id="s5"&gt;<br>      &lt;name&gt;NYU&lt;/name&gt;<br>      &lt;node id="n8314"&gt;<br>        &lt;hostname&gt;planetx.scs.cs.nyu.edu&lt;/hostname&gt;<br>        &lt;bw_limit units="kbps"&gt;10000&lt;/bw_limit&gt;<br>        &lt;sliver /&gt;<br>      &lt;/node&gt;<br>    &lt;/site&gt;<br>  &lt;/network&gt;<br>&lt;/RSpec&gt;<br
+ style="font-family: Times New Roman,Times,serif;"></pre>
+      </li>
+      <li style="font-family: Times New Roman,Times,serif;">
+        <pre><big><span style="font-weight: bold;">ORCA:</span> Below are the commands and config file to access ORCA resources.<br><br><span
+ style="color: rgb(51, 204, 255);">Below is the config file (omni_config_pg) details to access ORCA account.</span></big><br
+ style="color: rgb(51, 204, 255);"><br>[omni]<br>default_cf = pg<br>users = dkumar<br><br># ---------- Users ----------<br>[dkumar]<br>urn = urn:publicid:IDN+emulab.net+user+dkumar<br>keys = ~/.ssh/protogeni.pub<br><br># ---------- Frameworks ----------<br>[pg]<br>type=pg<br>verbose=false<br>sa = https://www.emulab.net:443/protogeni/xmlrpc/sa<br>ch = https://www.emulab.net:443/protogeni/xmlrpc/ch<br>cert = ~/.ssl/emulab-orca-cleartext.pem<br>key = ~/.ssl/emulab-orca-cleartext.pem<br><br><br><big
+ style="color: rgb(51, 204, 255);"><span
+ style="font-family: Times New Roman,Times,serif;">Below are the commands used to access ORCA resources using OMNI. </span></big><br
+ style="font-family: Times New Roman,Times,serif;"><br>#listresources<br><br>./src/omni.py -c omni_config_pg -a https://geni.renci.org:11443/orca/xmlrpc listresources<br><br>#create slice<br><br>./src/omni.py -c omni_config_pg -a https://geni.renci.org:11443/orca/xmlrpc createslice "slice name"<br><br># renew slice<br><br>./src/omni.py -c omni_config_pg -a https://geni.renci.org:11443/orca/xmlrpc renewslice "slice name" "renew_date"<br><br># create sliver<br><br>./src/omni.py -c omni_config_pg -a https://geni.renci.org:11443/orca/xmlrpc -n createsliver "slice name" "rspec"<br><br># sliver status<br><br>./src/omni.py -c omni_config_pg -a https://geni.renci.org:11443/orca/xmlrpc -n sliverstatus "slice name"<br><br># delete sliver<br><br>./src/omni.py -c omni_config_pg -a https://geni.renci.org:11443/orca/xmlrpc -n deletesliver "slice name"<br><br><big><br><span
+ style="font-family: Times New Roman,Times,serif; color: rgb(51, 204, 255);">Sample Rspec file to access ORCA nodes is given below.</span></big><br
+ style="font-family: Times New Roman,Times,serif;"><br>&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br>&lt;rspec type="request" xsi:schemaLocation="http://www.protogeni.net/resources/rspec/2<br>                                          http://www.protogeni.net/resources/rspec/2/request.xsd"<br>       xmlns:flack="http://www.protogeni.net/resources/rspec/ext/flack/1"<br>       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"<br>       xmlns="http://www.protogeni.net/resources/rspec/2"&gt;<br>  &lt;node client_id="exclusive-0" component_manager_id="urn:publicid:IDN+emulab.net+authority+cm" exclusive="true"&gt;<br>    &lt;sliver_type name="raw-pc"&gt;<br>      &lt;disk_image name="urn:publicid:IDN+emulab.net+image+emulab-ops//FEDORA10-STD"/&gt;<br>    &lt;/sliver_type&gt;<br>  &lt;/node&gt;<br>&lt;/rspec&gt;<br></pre>
+      </li>
+    </ul>
+  </li>
+</ol>
+<pre><br><br><br></pre>
+</body>
+</html>

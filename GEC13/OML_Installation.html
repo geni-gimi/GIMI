@@ -1,0 +1,285 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="Content-Type">
+  <title>OML_Installation</title>
+</head>
+<body>
+<div style="text-align: center;"><big><big><span
+ style="font-weight: bold; text-decoration: underline;">OML/OMF
+Installation<br>
+<br>
+</span></big></big>
+<div style="text-align: left;"><big><big><span
+ style="font-weight: bold; text-decoration: underline;">On Ubuntu
+Machines:</span><br>
+<br>
+<small>Before you can install the OML Ubuntu packages, you must tell
+Ubuntu (or Debian) where to get them. To do this, append the following
+line to your /etc/apt/sources.list file<br>
+</small><br>
+<small><span style="font-weight: bold;">deb
+http://pkg.mytestbed.net/ubuntu natty/</span></small><br>
+<br>
+<small>Then, run the following command</small><br>
+<br>
+<small><span style="font-weight: bold;">$ sudo apt-get update</span></small><br>
+<br>
+<small>Next, run the following commands to install the required
+libraries</small><br>
+<br>
+<small><span style="font-weight: bold;">$ sudo apt-get install sqlite3
+libocomm0</span></small><br>
+<br>
+<small>If you want to run an OML measurement collection server, you
+must install the oml-server package with the following command:</small><br>
+<br>
+<small><span style="font-weight: bold;">$ sudo apt-get install
+oml2-server</span></small><br>
+<br>
+<small>The oml2-server program will be installed to automatically start
+the measurement collection server whenever your computer starts or
+reboots. It does this using the standard Ubuntu/Debian /etc/init.d
+script mechanism. To start or stop the server manually, do this:<br>
+</small><br>
+<small><span style="font-weight: bold;"># Stop the server:</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">$ sudo /etc/init.d/oml2-server stop</span><br
+ style="font-weight: bold;">
+<br style="font-weight: bold;">
+<span style="font-weight: bold;"># Start the server again:</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">$ sudo /etc/init.d/oml2-server start</span><br
+ style="font-weight: bold;">
+<br style="font-weight: bold;">
+<span style="font-weight: bold;"># Cycle the server (stop, then start):</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">$ sudo /etc/init.d/oml2-server restart</span><br
+ style="font-weight: bold;">
+<br style="font-weight: bold;">
+</small><br>
+<small>If you need to use the proxy server for either disconnected
+experiments or experiments where transmitting measurements continuously
+could change the outcome of the experiment, you may want to install the
+OML proxy server:<br>
+</small><br>
+<small><span style="font-weight: bold;">$ sudo apt-get install
+oml2-proxy-server</span></small><br>
+<br>
+<small>If you want to develop your own OML client applications to do
+customized measurement tasks, or if you want to adapt an existing
+program to use OML to do some measurements, you will need to install
+the development headers for liboml2:<br>
+</small><br>
+<small><span style="font-weight: bold;">$ sudo apt-get install
+liboml2-dev</span></small><br>
+<br>
+<br>
+<span style="font-weight: bold; text-decoration: underline;">On Debian
+Machines: </span><br>
+<br>
+<small>Install the dependencies using the following command:</small><br>
+<br>
+<small><span style="font-weight: bold;">$ sudo yum install
+libxml2-devel sqlite-devel popt-devel make autoconf automake libtool
+check pkgconfig python ruby asciidoc texinfo</span></small><br>
+<br>
+<small>To install OML from source, run the following commands:</small><br>
+<br>
+<small><span style="font-weight: bold;">$ wget
+http://omf.mytestbed.net/attachments/download/583/oml2-2.6.1.tar.gz</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">$ tar -xvvf oml2-2.6.1.tar.gz</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">$ cd oml2-2.6.1</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">$ sudo yum install autoconf automake
+libtool pkg-config</span><br style="font-weight: bold;">
+<span style="font-weight: bold;">$ autoreconf --install</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">$ ./configure</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">$ sudo make</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">$ sudo make check</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">$ sudo make install</span><br
+ style="font-weight: bold;">
+</small><br>
+<small>To start the OML server run the following command:</small><br>
+<br>
+<small><span style="font-weight: bold;">$ oml2-server</span></small><br>
+<br>
+<small>If you get an error as to permission denied or similar, execute
+the following permission command and retry:</small><br>
+<br>
+<small><span style="font-weight: bold;">$ sudo chmod a+w
+/usr/local/var/oml2/</span></small><br>
+<br>
+<small>The default configuration parameters to start the oml server is
+provided in /etc/default/oml2-server, it contains the following <br>
+<br>
+OPTS="-l 3003 --logfile=/var/log/oml2-server.log --user=oml2
+--group=oml2"<br>
+<br>
+To start the oml-server with your own parameter settings, you can
+override the options like shown below,<br>
+<br>
+<span style="font-weight: bold;">$ oml2-server --listen=3003
+--data-dir="directory_path" --logfile=oml_server.log<br>
+<br>
+<br>
+<big style="text-decoration: underline;">"OML"ified Iperf:</big><br>
+<br>
+</span>We have the Iperf client application already modified to work
+with OML options. As with OML, there are two different versions to
+install it on Ubuntu and Debian machines.<br>
+<br>
+<span style="font-weight: bold; text-decoration: underline;">On Ubuntu:<br>
+<br>
+</span></small></big><span
+ style="color: rgb(0, 0, 0); font-family: Georgia,serif; font-size: 16px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 24px; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">To
+install
+the OML Iperf client application, first add the following line
+to your<span class="Apple-converted-space">&nbsp;</span></span><code
+ style="color: rgb(0, 0, 0); font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 24px; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255);">/etc/apt/sources.list</code><span
+ style="color: rgb(0, 0, 0); font-family: Georgia,serif; font-size: 16px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 24px; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"><span
+ class="Apple-converted-space">&nbsp;</span>file, if it is not already
+present:</span></big><br>
+<br>
+<big><big><small><span style="font-weight: bold;">deb
+http://pkg.mytestbed.net/ubuntu oneiric/<br>
+<br>
+</span>Update ubuntu distribution packages,<br>
+<br>
+<span style="font-weight: bold;">$ sudo apt-get update<br>
+<br>
+</span>Then, Install oml2-iperf by running the following command,<br>
+<br>
+<span style="font-weight: bold;">$ sudo apt-get install oml2-iperf<br>
+<br>
+<span style="font-weight: bold;"><br>
+<span style="text-decoration: underline;">On Debian Machines:</span><br>
+<br>
+</span></span>Run the following commands to install omlified iperf on
+debian machines,<br>
+<br>
+<span style="font-weight: bold;">$ git clone
+git://git.mytestbed.net/iperf.git -b oml/master<br>
+$ cd iperf<br>
+$ autoreconf --install<br>
+$ ./configure<br>
+$ sudo make <br>
+$ sudo make install<br>
+<br>
+</span>To start Iperf application with OML, Start the Iperf server on a
+machine with public IP address, by executing the following command,<br>
+<br>
+<span style="font-weight: bold;">$ iperf -s</span><br>
+<span style="font-weight: bold;"></span><span style="font-weight: bold;"><span
+ style="font-weight: bold;"></span></span><span
+ style="font-weight: bold;"></span></small></big></big>
+<p
+ style="color: rgb(0, 0, 0); font-family: Georgia,serif; font-size: 16px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 24px; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255);"><big>Start
+the
+Iperf client with OML options with the following command,<br>
+</big></p>
+<p
+ style="color: rgb(0, 0, 0); font-family: Georgia,serif; font-size: 16px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 24px; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255);"><big><span
+ style="font-weight: bold;">$ iperf -c "iperf server address" -y o
+--oml-file "file name" --oml-exp-id "experiment ID"
+--oml-id = "id" --oml-server "oml server location"<br>
+</span></big></p>
+<span style="font-family: Georgia,serif;"><big>Oml-server location in
+the above command should be of the form,<span style="font-weight: bold;">
+tcp://servername:port<br>
+<br>
+Note: </span>The downside of using command line arguments is that, you
+can't use "oml-file" and "oml-server" option at the same time. If you
+want to store the results to a central server, use the "oml-server"
+option. If you want to store in local server, use "oml-file" option.</big><span
+ style="font-weight: bold;"><big><br>
+</big> <br>
+</span><br style="font-weight: bold;" class="Apple-interchange-newline">
+</span><big style="text-decoration: underline; font-weight: bold;">Using
+R
+to Plot the Results of Iperf Measurement</big><span
+ style="font-weight: bold;">:</span><br>
+<big><big><small><span
+ style="font-weight: bold; text-decoration: underline;"></span><span
+ style="font-weight: bold;"><small><br>
+</small></span><small>Installation of R on Ubuntu:<br>
+<br>
+Add the following line to the /etc/apt/sources.list </small></small></big><br>
+<span style="font-weight: bold;"><br>
+</span><small style="font-weight: bold;">deb <a
+ href="http://%3cmy.favorite.cran.mirror%3e/bin/linux/ubuntu"
+ style="background-color: white; color: rgb(128, 0, 128);">http://</a><a
+ href="http://cran.cnr.berkeley.edu/">cran.cnr.berkeley.edu</a><a
+ href="http://%3cmy.favorite.cran.mirror%3e/bin/linux/ubuntu"
+ style="background-color: white; color: rgb(128, 0, 128);">/bin/linux/ubuntu</a>
+oneiric/</small></big><br>
+<big><big><small><span style="font-weight: bold;"> </span><br>
+<small>Run the following commands,</small><br>
+<br>
+<span style="font-weight: bold;">$</span></small></big></big><span
+ style="font-weight: bold;"> gpg --keyserver keyserver.ubuntu.com
+--recv-key E084DAB9</span><big style="font-weight: bold;"><big><small>
+<br>
+$</small></big></big><span style="font-weight: bold;"> gpg -a --export
+E084DAB9 | sudo apt-key add -</span><br>
+<big><big><small><span style="font-weight: bold;">$ sudo apt-get update</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">$ sudo apt-get install r-base</span></small><br
+ style="font-weight: bold;">
+<small><br>
+<small>This will install R on your system. To install SQLite packages,
+do the following,</small><br>
+<br>
+<small><span style="font-weight: bold;">$sudo R</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">&gt; install.packages("RSQLite")</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">&gt; q()<br>
+<br>
+</span>This would install SQLite packages required to access SQLite
+database. To plot the results from the Iperf measurement performed and
+assuming the database is stored on the machine where R is installed.
+Create a file say "iperf_plot.r" and add the following R commands into
+it and save it. <br>
+<br>
+<span style="font-weight: bold;">library(RSQLite)</span><br>
+<span style="font-weight: bold;">con &lt;-
+dbConnect(dbDriver("SQLite"), dbname = "database path")</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">dbListTables(con)</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">dbReadTable(con,"iperf_transfer")</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">mydata &lt;- dbGetQuery(con, "select
+begin_interval,size,end_interval from iperf_transfer")</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">intervals &lt;- mydata$end_interval -
+mydata$begin_interval</span><br style="font-weight: bold;">
+<span style="font-weight: bold;">throughput &lt;-
+mydata$size/intervals/1024/1024*8</span><br style="font-weight: bold;">
+<span style="font-weight: bold;">plot(throughput,type="o",xlab="Experiment
+Interval",ylab="Throughput
+(Mbps)", main="Iperf_Experiment")</span><br style="font-weight: bold;">
+</small></small></big></big><br>
+Once you have a file with these commands and changed the dbname
+attribute to the name of your resultant database, you can run the
+following commands to create the plot.<br>
+<br style="font-weight: bold;">
+<span style="font-weight: bold;">$ R</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">&gt; source("R commands path")</span><br>
+<big><big><big><big><big><big><big> <big><span
+ style="font-weight: bold; text-decoration: underline;"></span></big></big></big></big></big></big></big></big></div>
+</div>
+<br>
+You should be able to see pretty nice plots, you can modify the R
+script above to your needs. <br>
+</body>
+</html>
