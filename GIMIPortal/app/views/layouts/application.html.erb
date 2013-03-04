@@ -16,7 +16,7 @@
   <% if user_signed_in? %>
     Signed in as <%= current_user.username %>. Not you?
     <%= link_to "Sign out", destroy_user_session_path, :method => :delete %>
-    User labwiki= <%= current_user.url %>
+    User labwiki= <%= session[:current_user_port] %>
   <% else %>
     <%= link_to "Sign up", new_user_registration_path %> or <%= link_to "sign in", new_user_session_path %>
   <% end %>
