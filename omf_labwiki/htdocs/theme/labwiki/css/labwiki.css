@@ -1,0 +1,267 @@
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+#k-topbar .brand {
+  color: #BBB;
+  display: block;
+  float: left;
+  padding-top: 5px;
+  padding-left: 20px;
+  font-size: 20px;
+  font-weight: 200;
+}
+
+#k-topbar ul.secondary-nav {
+  float: right;
+  margin-left: 10px;
+  padding-right: 0;
+  display: block;
+  margin: 0 10px 0 0;
+  position: relative;
+  left: 0;
+}
+
+#k-topbar ul.secondary-nav li {
+  display: block;
+  float: left;
+}
+
+#k-topbar ul.secondary-nav i {
+  padding-right: 5px;
+}
+
+#k-topbar ul.secondary-nav a {
+  display: block;
+  float: none;
+  padding-top: 6px;
+  padding-right: 15px;
+  text-decoration: none;
+  color: #BFBFBF;
+  font-size: 13px;
+}
+
+
+#k-topbar ul.secondary-nav a:hover {
+  color: white;
+}
+
+/* content blocks */
+.k-panel .block-content
+{
+  padding: 0;
+  text-align: left;
+  font-size: 120%
+}
+
+
+
+/* Content styling */
+
+.widget_body .text {
+  padding: 10px;
+}
+
+.widget_body .text p {
+}
+
+/** SEARCH BOX **/
+  
+.content-selection .action-buttons {
+  background: #AAAAAA;
+}
+
+.content-selection .action-buttons:hover {
+  background: black;
+}
+  
+.content-selection .new-button {
+    background: url("../images/sprites-32.png") no-repeat scroll -96px 0 transparent;
+    border: 0 none;
+    height: 32px;
+    width: 32px;
+}
+
+/* Content search */
+
+.ui-menu {
+  list-style:none;
+  padding: 2px;
+  margin: 0;
+  display:block;
+  text-align: left;
+  left: 0;
+  border-bottom: 1px solid #BBB;
+  background: #DDD;
+  /*
+  float: left;
+  */
+}
+.ui-menu .ui-menu {
+  margin-top: -3px;
+}
+.ui-menu .ui-menu-item {
+  margin:0;
+  padding: 0;
+  zoom: 1;
+/*  float: left;
+*/
+  clear: left;
+
+  width: 100%;
+}
+.ui-menu .ui-menu-item a {
+  text-decoration:none;
+  display:block;
+  padding:.2em .4em;
+  padding-left: 2em;
+  line-height:1.5;
+  zoom:1;
+}
+.ui-menu .ui-menu-item-selected a,
+.ui-menu .ui-menu-item a.ui-state-hover,
+.ui-menu .ui-menu-item a.ui-state-active {
+  font-weight: normal;
+/*  
+  margin: -1px;
+  border: 1px solid #fbd850; 
+  font-weight: bold; 
+  */
+  color: #eb8f00; 
+  outline: none;  
+  background: #fdf5ce
+}
+
+.ui-menu .ui-menu-item-first-hist {
+  margin-top: 5px;
+  padding-top: 5px;  
+  border-top: 1px solid #BBB;
+}
+
+/*
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus { border: 1px solid #fbcb09; background: #fdf5ce url(../images/?new=fdf5ce&w=1&h=400&f=png&q=100&fltr[]=over|textures/02_glass.png|0|0|100) 50% 50% repeat-x; font-weight: bold; color: #c77405; outline: none; }
+.ui-state-hover a, .ui-state-hover a:hover { color: #c77405; text-decoration: none; outline: none; }
+.ui-state-active, .ui-widget-content .ui-state-active { border: 1px solid #fbd850; background: #ffffff url(../images/?new=ffffff&w=1&h=400&f=png&q=100&fltr[]=over|textures/02_glass.png|0|0|65) 50% 50% repeat-x; font-weight: bold; color: #eb8f00; outline: none; }
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #eb8f00; outline: none; text-decoration: none; }
+*/
+
+/* Column headers */
+
+.k-panel .summary {
+  /*
+    background-color: transparent;
+    border-bottom: 1px solid #CCCCCC;
+  */
+    padding: 5px;
+    padding-left: 15px;
+    padding-top: 10px;    
+    padding-bottom: 10px;    
+}
+
+.k-panel .summary .label {
+    margin: 0px;
+    text-align: left;
+    
+/* 
+    line-height: 1;
+    font-size: 30px;
+    line-height: 36px;
+    font-size: 24px;
+    line-height: 30px;
+*/
+    font-family: inherit;
+    font-weight: bold;
+    color: inherit;
+    text-rendering: optimizelegibility;   
+    background-color: white; 
+}
+
+.k-panel .summary img {
+    margin: 0;
+    margin-right: 10px;
+}
+
+/*** DRAGGING CONTENT */
+
+.ui-drop-hover {
+  background: #fdf5ce;
+}
+
+/**** TEXT ****/
+
+.widget_body .text h1 {
+  line-height: 1.3;
+}
+
+/** CODE MIRROR **/
+
+ol.codemirror_toolbar li {
+  margin: 0;
+}
+/*ol.codemirror_toolbar li a {
+    background-size: 16px 16px;
+}  
+
+ol.codemirror_toolbar li a {
+  height: 30px;
+  display: inline-block;
+  padding: 0;
+}*/
+
+.widget_container .widget_body_code {
+  overflow: visible;
+}
+
+.codemirror_edit {
+  overflow:hidden;
+}
+
+
+/***** H3 - collapse ****/
+
+.widget_body h3 {
+  border-top: 1px solid #E5E5E5;
+  color: #777;
+  font-size: 16px;
+  line-height: 27px;
+  margin: 0;
+  font-family: inherit;
+  font-weight: bold;
+  text-rendering: optimizelegibility;
+}
+
+.widget_body h3 a {
+  display: inline-block;
+  padding: 16px 0 0 0;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  height: 0px !important;
+  height /**/:16px;
+  width: 16px;
+  background: url(/plugin/experiment/img/toggle.png) 0px -16px no-repeat;
+}
+  
+.widget_body h3 a.toggle-closed {   
+  background: url(/plugin/experiment/img/toggle.png) 0px 3px no-repeat;
+}
+
+.widget_body h3 a.toggle:hover {
+  background-color: white;
+}
+
+
+
+/*.experiment-description form li.buttons input {
+  font-size: 100%;
+  margin-right: 5px;
+}*/
+
+/**** TOOLBAR *****/
+.codemirror_toolbar_container {
+  border-bottom: 1px solid silver;
+  text-align: left;
+}
+
+
+

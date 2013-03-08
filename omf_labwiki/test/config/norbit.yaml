@@ -1,0 +1,11 @@
+
+labwiki:
+  repositories:
+    foo: ~/tmp/labwiki
+  plugins:
+    experiment:
+      ec_runner: ~/src/omf_labwiki/test/omf_exec/omf_exec-norbit.sh
+      oml:
+        host: norbit.npc.nicta.com.au
+        user: oml2
+        pwd: omlisgoodforyou
