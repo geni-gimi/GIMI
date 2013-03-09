@@ -3,11 +3,14 @@
 LWPORT=$1
 UNAME=$2
 
-LABWIKI_HOME=/home/labwiki/GIMI/omf_labwiki
-OMF_HOME=/home/labwiki/omf_web
+LABWIKI_HOME=${HOME}/GIMI/omf_labwiki
+OMF_HOME=${HOME}/omf_web
 
-source ~/.rvm/scripts/rvm
-nohup ruby -I $LABWIKI_HOME/lib -I $OMF_HOME/lib $LABWIKI_HOME/bin/labwiki --lw-config /home/${UNAME}/exogeni.yaml --port $LWPORT start > /dev/null &
+#source ~/.rvm/scripts/rvm
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+ruby use ruby 1.9.3
+
+nohup ruby -I $LABWIKI_HOME/lib -I $OMF_HOME/lib $LABWIKI_HOME/bin/labwiki --lw-config /home/${UNAME}/exogeni.yaml --port $LWPORT start > /tmp/labwiki$LWPORT.log &
 
 lwpid=$!
 
