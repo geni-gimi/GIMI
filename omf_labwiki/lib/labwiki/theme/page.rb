@@ -60,7 +60,7 @@ module OMF::Web::Theme
                 end
               end
               li do
-                a :href => 'http://emmy9.casa.umass.edu:3005/users/sign_out', :class => 'logout' do
+                a :href => 'http://emmy9.casa.umass.edu:3010/users/sign_out', :class => 'logout' do
                   i :class => "icon-off icon-white"
                   text 'Log out'
                 end 

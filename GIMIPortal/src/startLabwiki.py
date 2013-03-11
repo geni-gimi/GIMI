@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 myport = 5020 
-endport = 5050 
+endport = 5039
 
 token = "/tmp/labwikitoken"
 

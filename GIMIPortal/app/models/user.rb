@@ -6,6 +6,25 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :username, :url
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :username, :url, :approved
   # attr_accessible :title, :body
+
+def active_for_authentication? 
+  super && approved? 
+end 
+
+def inactive_message 
+  if !approved? 
+    :not_approved 
+  else 
+    super # Use whatever other message 
+  end 
+end
+
+after_create :send_admin_mail
+def send_admin_mail
+  UserMailer.new_user_waiting_for_approval(self).deliver
+  UserMailer.welcome_email(self).deliver
+end
+
 end
