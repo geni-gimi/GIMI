@@ -26,6 +26,7 @@ module OMF::Web::Theme
     def initialize(widget, opts)
       super
       @title = "LabWiki"
+      @uname = opts[:user]
       index = -1
       @col_renderers = [:plan, :prepare, :execute].map do |name|
         index += 1
@@ -56,7 +57,7 @@ module OMF::Web::Theme
               li do
                 a :href => '#', :class => 'user' do
                   i :class => "icon-user icon-white"
-                  text 'Gimi'
+                  text @uname 
                 end
               end
               li do

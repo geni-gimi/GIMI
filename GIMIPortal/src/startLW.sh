@@ -10,7 +10,7 @@ OMF_HOME=${HOME}/omf_web
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
 ruby use ruby 1.9.3
 
-nohup ruby -I $LABWIKI_HOME/lib -I $OMF_HOME/lib $LABWIKI_HOME/bin/labwiki --lw-config /home/${UNAME}/exogeni.yaml --port $LWPORT start > /tmp/labwiki$LWPORT.log &
+nohup ruby -I $LABWIKI_HOME/lib -I $OMF_HOME/lib $LABWIKI_HOME/bin/labwiki --lw-config /home/${UNAME}/exogeni.yaml --port $LWPORT --user $UNAME start > /tmp/labwiki$LWPORT.log &
 
 lwpid=$!
 
