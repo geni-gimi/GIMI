@@ -21,7 +21,7 @@ GIT
 PATH
   remote: .
   specs:
-    labwiki (0.12)
+    labwiki (0.15.pre)
       omf_web (~> 0.9)
       ruby_parser (~> 2.3.1)
 

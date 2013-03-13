@@ -1,14 +1,8 @@
 #!/bin/bash
 
 LWPORT=$1
+UNAME=$2
 
-lwpid=`cat /var/run/labwiki/labwiki${LWPORT}.pid`
-# verify lwpid
+sudo -u $UNAME ${HOME}/GIMI/GIMIPortal/src/userWrapper.sh stop $LWPORT
 
-ps -p ${lwpid}
-if [ $? -eq 0 ]; then
-    kill $lwpid
-fi
-
-rm /var/run/labwiki/labwiki${LWPORT}.pid
 
