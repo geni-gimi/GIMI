@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/mytestbed/omf_web
-  revision: 6a97e884d0562cb747b6ac77d2528dcd6c73a099
+  revision: 2b4eaa6846d7d52af94c8e8bd4cbc28898b071a5
   specs:
     omf_web (0.9.7)
       activesupport (~> 3.0.0)
@@ -41,7 +41,7 @@ GEM
       rake
       treetop
       treetop (>= 1.2.3)
-    eventmachine (1.0.1)
+    eventmachine (1.0.3)
     grit (2.5.0)
       diff-lcs (~> 1.1)
       mime-types (~> 1.15)

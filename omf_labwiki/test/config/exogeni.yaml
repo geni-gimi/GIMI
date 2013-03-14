@@ -1,0 +1,11 @@
+
+labwiki:
+  repositories:
+    foo: /home/user/tmp/user
+  plugins:
+    experiment:
+      ec_runner: /home/labwiki/GIMI/omf_labwiki/test/omf_exec/omf_exec-norbit.sh
+      oml:
+        host: localhost
+        user: oml
+        pwd: omlisgoodforyou
