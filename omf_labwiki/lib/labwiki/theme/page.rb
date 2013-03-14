@@ -37,7 +37,7 @@ module OMF::Web::Theme
     def content
       javascript %{
         if (typeof(LW) == "undefined") LW = {};
-        LW.session_id = OML.session_id = '#{Thread.current["sessionID"]}';
+        LW.session_id = OML.session_id = '#{OMF::Web::SessionStore.session_id}';
         
         L.provide('jquery', ['/resource/vendor/jquery/jquery.js']);
         L.provide('jquery.periodicalupdater', ['/resource/vendor/jquery/jquery.periodicalupdater.js']);   
@@ -48,7 +48,7 @@ module OMF::Web::Theme
           X = $;
         });
         */
-      }    
+      } 
       div :id => "container", :style => "position: relative; height: 100%;" do
         div :id => "k-window" do
           div :id => "k-topbar" do
