@@ -7,10 +7,35 @@ use ::Rack::ShowExceptions
 OMF::Web::Runner.instance.life_cycle(:pre_rackup)
 options = OMF::Web::Runner.instance.options
 
+class SessionAuthenticatorHack
+  def initialize(app, opts = {})
+    @app = app
+  end
+    
+  def call(env)
+    req = ::Rack::Request.new(env)
+    unless sid = req.cookies['sid']
+      sid = "s#{(rand * 10000000).to_i}_#{(rand * 10000000).to_i}"
+    end
+    Thread.current["sessionID"] = sid  # needed for Session Store
+    unless OMF::Web::SessionStore[:email, :user]
+      require 'etc'
+      user = Etc.getlogin
+      OMF::Web::SessionStore[:email, :user] = user 
+      OMF::Web::SessionStore[:name, :user] = user
+    end
+
+    status, headers, body = @app.call(env)
+    Rack::Utils.set_cookie_header!(headers, 'sid', sid) if sid
+    [status, headers, body]      
+  end
+end
+use SessionAuthenticatorHack
+
 require 'omf-web/rack/session_authenticator'                               
-use OMF::Web::Rack::SessionAuthenticator, #:expire_after => 10, 
-          :login_page_url => '/resource/login/login.html',
-          :no_session => ['^/resource/', '^/login', '^/logout']
+# use OMF::Web::Rack::SessionAuthenticator, #:expire_after => 10, 
+          # :login_page_url => '/resource/login/login.html',
+          # :no_session => ['^/resource/', '^/login', '^/logout']
 
 require 'labwiki/authenticator'
 
