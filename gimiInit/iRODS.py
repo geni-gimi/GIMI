@@ -99,7 +99,7 @@ class iRODS:
         print "Ticket for new directory: " + ticket
         return ticket 
 
-    # Creates tickets for the experiment directory taking in user restrictions & an expiration time
+    # Postpones the time at which the iticket expires
     # expire_time must be UNIX timestamp
     def extendTicket(self, ticket, expire_time=0):
         if expire_time != 0:
@@ -108,13 +108,36 @@ class iRODS:
         return ticket 
   ####################################
 
-# This creates an example iRODS object & creates the XML files & makes a ticket
-newExp = iRODS('exp_id20', 'exp_title', 'exp_first_name', 'exp_last_name', 'exp_org', "slice_name")
-#make an initial ticket
-myTicket=newExp.makeTicket(['koneil2','koneil3'])
+    # Puts manifest into iRODS
+    def pushManifest(self, manifest):
+        subprocess.check_output(['icd', self.exp_id])
+        subprocess.check_output(['iput', manifest])
+        #newArtifact = simpleArtifact.Artifact(manifest)
+        #newArtifact.makeXML()
+        #subprocess.check_output(['iput', 'artifact.xml'])
+        print "Manifest " + manifest + " has been pushed to iRODS"
 
-myTicket=newExp.makeTicket(expire_time='1372654800')
-myTicket=newExp.makeTicket()
 
+    def pushOMlScripts(self, OML):
+        subprocess.check_output(['icd', self.exp_id])
+        for x in OML:
+            subprocess.check_output(['iput', OML])
+            #newArtifact = simpleArtifact.Artifact(manifest)
+            #newArtifact.makeXML()
+            #subprocess.check_output(['iput', 'artifact.xml'])
+        print "OML scripts have been pushed to iRODS"
+        
+
+
+## This creates an example iRODS object & creates the XML files & makes a ticket
+#newExp = iRODS('exp_id23', 'exp_title', 'exp_first_name', 'exp_last_name', 'exp_org', "slice_name")
+
+#make an initial tickets
+#myTicket=newExp.makeTicket(['koneil2','koneil3'])
+#myTicket=newExp.makeTicket(expire_time='1372654800')
+#myTicket=newExp.makeTicket()
+
+##To Push manifest
+#newExp.pushManifest('TwoVMs')
 
 
