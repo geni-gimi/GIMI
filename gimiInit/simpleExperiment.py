@@ -4,12 +4,14 @@ from xml.etree.ElementTree import Element, SubElement, dump, ElementTree
 #This class creates a simple experiment XML containing only the mandatory items
 class Experiment: 
     #Initializes variables
-    def __init__(self, exp_id, title, first_name, last_name, exp_org):
+    def __init__(self, exp_id, title, first_name, last_name, exp_org, start_time, end_time):
         self.exp_id = exp_id
         self.title = title
         self.first_name = first_name
         self.last_name = last_name
         self.exp_org = exp_org
+        self.start_time = start_time
+        self.end_time = end_time
 
     #Creates XML file using ElementTree & writes it to file "experiment.xml"
     def makeXML(self):
@@ -35,11 +37,11 @@ class Experiment:
 
         # <Experiment><Duration><Start/>
         Start = SubElement( Duration, 'Start')
-        Start.text = 'NOW'
+        Start.text = self.start_time
   
         # <Experiment><Duration><End/>
         End = SubElement( Duration, 'End')
-        End.text = '9013-01-01T00:00:01'
+        End.text = self.end_time
 
         # <Experiment><Experimenter/>
         Experimenter = SubElement( TheExperiment, 'Experimenter')
