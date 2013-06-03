@@ -7,35 +7,31 @@ import simpleExperiment
 import simpleStep
 import simpleArtifact
 
-# Things I need to write XML files:
-# -Experiment id
-# -Experiment name, 
-# -Experimenter name & organization
-# -Slicename
-
 # Assumptions: 
 # -iinit has been called and was successful
 # -exp_id is unique for the user
 # 
 class iRODS:
     # This creates the iRODS experiment directory with initial XML files 
-    def __init__(self, exp_id, exp_title, exp_first_name, exp_last_name, exp_org, slice_name):
+    def __init__(self, proj_id, proj_title, PI_first_name, PI_last_name, PI_org, exp_id, exp_title, exp_first_name, exp_last_name, exp_org, exp_start, exp_end, step_name, step_seq_id, resource_id, slice_name, artifact_name):
         #set variables
-        self.proj_id = "Project ID"
-        self.proj_title = "Project title"
-        self.PI_first_name = "PI firstName"
-        self.PI_last_name = "PI lastName"
-        self.PI_org = "PI organization"
-        self.exp_id = exp_id+""
+        self.proj_id = proj_id
+        self.proj_title = proj_title
+        self.PI_first_name = PI_first_name
+        self.PI_last_name = PI_last_name
+        self.PI_org = PI_org
+        self.exp_id = exp_id
         self.exp_title = exp_title
         self.exp_first_name = exp_first_name
         self.exp_last_name = exp_last_name
         self.exp_org = exp_org
-        self.step_name = "Step title" 
-        self.step_seq_id = "First"
-        self.resource_id = "1234567"
+        self.exp_start = exp_start
+        self.exp_end = exp_end
+        self.step_name = step_name 
+        self.step_seq_id = step_seq_id
+        self.resource_id = resource_id
         self.slice_name = slice_name
-        self.artifact_name = "Filename"
+        self.artifact_name = artifact_name
         #write XML files
         self.makeFiles()
         #create directories and include initial XML files
@@ -49,7 +45,7 @@ class iRODS:
         newProject = simpleProject.Project(self.proj_id, self.proj_title, self.PI_first_name, self.PI_last_name, self.PI_org)
         newProject.makeXML()
         # makes experiment XML file
-        newExperiment = simpleExperiment.Experiment(self.exp_id, self.exp_title, self.exp_first_name, self.exp_last_name, self.exp_org)
+        newExperiment = simpleExperiment.Experiment(self.exp_id, self.exp_title, self.exp_first_name, self.exp_last_name, self.exp_org, self.exp_start, self.exp_end)
         newExperiment.makeXML()
         # makes step XML file
         newStep = simpleStep.Step(self.step_seq_id, self.step_name, self.resource_id, self.slice_name)
@@ -132,7 +128,7 @@ class iRODS:
 #### SAMPLE CODE ####
 
 ## This creates an example iRODS object & creates the XML files & makes a ticket
-#newExp = iRODS('exp_id23', 'exp_title', 'exp_first_name', 'exp_last_name', 'exp_org', "slice_name")
+#newExp = iRODS('proj_id', 'proj_title', 'PI_first_name', 'PI_last_name', 'PI_org', 'exp_id24', 'exp_title', 'exp_first_name', 'exp_last_name', 'exp_org', 'exp_start', 'exp_end', 'step_name', 'step_seq_id', 'resource_id', 'slice_name', 'artifact_name')
 
 #make an initial tickets
 #myTicket=newExp.makeTicket(['koneil2','koneil3'])
