@@ -115,19 +115,21 @@ class iRODS:
         #newArtifact = simpleArtifact.Artifact(manifest)
         #newArtifact.makeXML()
         #subprocess.check_output(['iput', 'artifact.xml'])
-        print "Manifest " + manifest + " has been pushed to iRODS"
+        print "Manifest has been pushed to iRODS"
 
 
-    def pushOMlScripts(self, OML):
-        subprocess.check_output(['icd', self.exp_id])
-        for x in OML:
-            subprocess.check_output(['iput', OML])
+#    def pushOMlScripts(self, OML):
+#        subprocess.check_output(['icd', self.exp_id])
+#        for x in OML:
+#            subprocess.check_output(['iput', OML])
             #newArtifact = simpleArtifact.Artifact(manifest)
             #newArtifact.makeXML()
             #subprocess.check_output(['iput', 'artifact.xml'])
-        print "OML scripts have been pushed to iRODS"
+#        print "OML scripts have been pushed to iRODS"
         
 
+
+#### SAMPLE CODE ####
 
 ## This creates an example iRODS object & creates the XML files & makes a ticket
 #newExp = iRODS('exp_id23', 'exp_title', 'exp_first_name', 'exp_last_name', 'exp_org', "slice_name")
