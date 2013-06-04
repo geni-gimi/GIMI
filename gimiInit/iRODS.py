@@ -72,35 +72,28 @@ class iRODS:
         subprocess.check_output(['icd'])
       
 ########## TICKETS ##########
-
-    # Creates tickets for the experiment directory
-#    def makeTicket(self):
-#        subprocess.check_output(['icd'])
-#        ticket = subprocess.check_output(['iticket', 'create', 'write', self.exp_id])
-#        ticket = ticket.replace("ticket:","")
-#        ticket = ticket.replace("\n","")
-#        return ticket  
- ##########   NEW CODE    #########     
+    
     # Creates tickets for the experiment directory taking in user restrictions & an expiration time
     def makeTicket(self, users=None, expire_time=0):
         ticket = subprocess.check_output(['iticket', 'create', 'write', self.exp_id])
         ticket = ticket.replace("ticket:","")
         ticket = ticket.replace("\n","")
+        # Restricts users
         if users is None:
             users=[]
         for x in users:
             subprocess.check_output(['iticket', 'mod', ticket, 'add', 'user', x])
+        # Sets expiration time
         if expire_time != 0:
-            subprocess.check_output(['iticket', 'mod', ticket, 'expire', expire_time])
+            self.extendTicket(ticket, expire_time)
         print "Ticket for new directory: " + ticket
         return ticket 
 
     # Postpones the time at which the iticket expires
     # expire_time must be UNIX timestamp
-    def extendTicket(self, ticket, expire_time=0):
-        if expire_time != 0:
-            subprocess.check_output(['iticket', 'mod', ticket, 'expire', expire_time])
-            print "Expiration date is now set to" + expire_time
+    def extendTicket(self, ticket, expire_time):
+        subprocess.check_output(['iticket', 'mod', ticket, 'expire', expire_time])
+        print "Expiration date is now set to: " + expire_time
         return ticket 
   ####################################
 
@@ -108,9 +101,9 @@ class iRODS:
     def pushManifest(self, manifest):
         subprocess.check_output(['icd', self.exp_id])
         subprocess.check_output(['iput', manifest])
-        #newArtifact = simpleArtifact.Artifact(manifest)
-        #newArtifact.makeXML()
-        #subprocess.check_output(['iput', 'artifact.xml'])
+        newArtifact = simpleArtifact.Artifact(manifest)
+        newArtifact.makeXML()
+        subprocess.check_output(['iput', manifest+'-artifact.xml'])
         print "Manifest has been pushed to iRODS"
 
 
@@ -118,17 +111,17 @@ class iRODS:
 #        subprocess.check_output(['icd', self.exp_id])
 #        for x in OML:
 #            subprocess.check_output(['iput', OML])
-            #newArtifact = simpleArtifact.Artifact(manifest)
-            #newArtifact.makeXML()
-            #subprocess.check_output(['iput', 'artifact.xml'])
+#            newArtifact = simpleArtifact.Artifact(OML)
+#            newArtifact.makeXML()
+#            subprocess.check_output(['iput', 'OML-artifact.xml'])
 #        print "OML scripts have been pushed to iRODS"
         
 
 
 #### SAMPLE CODE ####
 
-## This creates an example iRODS object & creates the XML files & makes a ticket
-#newExp = iRODS('proj_id', 'proj_title', 'PI_first_name', 'PI_last_name', 'PI_org', 'exp_id24', 'exp_title', 'exp_first_name', 'exp_last_name', 'exp_org', 'exp_start', 'exp_end', 'step_name', 'step_seq_id', 'resource_id', 'slice_name', 'artifact_name')
+## This creates an example iRODS object & creates the XML files
+#newExp = iRODS('proj_id', 'proj_title', 'PI_first_name', 'PI_last_name', 'PI_org', 'exp_id27', 'exp_title', 'exp_first_name', 'exp_last_name', 'exp_org', 'exp_start', 'exp_end', 'step_name', 'step_seq_id', 'resource_id', 'slice_name', 'artifact_name')
 
 #make an initial tickets
 #myTicket=newExp.makeTicket(['koneil2','koneil3'])
