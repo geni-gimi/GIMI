@@ -2,77 +2,78 @@ from xml.etree import ElementTree
 from xml.etree.ElementTree import Element, SubElement, dump, ElementTree
 
 #This class creates a simple experiment XML containing only the mandatory items
-class Experiment: 
+class Experiment:
     #Initializes variables
-    def __init__(self, exp_id, title, first_name, last_name, exp_org, start_time, end_time):
-        self.exp_id = exp_id
-        self.title = title
-        self.first_name = first_name
-        self.last_name = last_name
-        self.exp_org = exp_org
-        self.start_time = start_time
-        self.end_time = end_time
+    def __init__(self, exp_authority, name, individual_type, individual_authority, individual_user, date_type, start):
+        self.exp_authority = exp_authority
+        self.name = name
+        self.individual_type = individual_type
+        self.individual_authority = individual_authority
+        self.individual_user = individual_user
+        self.date_type = date_type
+        self.start = start
 
     #Creates XML file using ElementTree & writes it to file "experiment.xml"
     def makeXML(self):
         # </Experiment>
-        TheExperiment = Element( 'Experiment')
+        TheExperiment =Element( 'Experiment')
         TheExperiment.attrib['xmlns']="http://geni.net/schema"
         TheExperiment.attrib['xmlns:xsi']="http://www.w3.org/2001/XMLSchema-instance"
         TheExperiment.attrib['xsi:schemaLocation']="http://geni.net/schema GENIObject.xsd"
 
-        # <Experiment><ID/>
-        ID = SubElement( TheExperiment, 'ExperimentIdentifier')
-        ID.text = self.exp_id
 
-        # <Experiment><Title/>
-        Title = SubElement( TheExperiment, 'Title')
+        # <Experiment><Name/>
+        Name = SubElement( TheExperiment, 'Name')
 
-        # <Experiment><Title><Title/>
-        Title2 = SubElement( TheExperiment, 'Title')
-        Title2.text = self.title
+        # <Experiment><Name><Authority/>
+        Authority = SubElement( Name, 'Authority')
+        Authority.text = self.exp_authority
 
-        # <Experiment><Duration/>
-        Duration = SubElement( TheExperiment, 'Duration')
+        # <Experiment><Name><Name2/>
+        Name2 = SubElement( Name, 'Name')
+        Name2.attrib['xml:lang']="en-US"
+        Name2.text = self.name
 
-        # <Experiment><Duration><Start/>
-        Start = SubElement( Duration, 'Start')
-        Start.text = self.start_time
+        # <Experiment><Individuals/>
+        Individuals = SubElement( TheExperiment, 'Individuals')
+
+        # <Experiment><Individuals><Individual/>
+        Individual = SubElement( Individuals, 'Individual')
+
+        # <Experiment><Individuals><Individual><Type/>
+        Type = SubElement( Individual, 'Type')
+        Type.text = self.individual_type
+
+        # <Experiment><Individuals><Individual><Authority/>
+        IndAuthority = SubElement( Individual, 'Authority')
+        IndAuthority.text = self.individual_authority
   
-        # <Experiment><Duration><End/>
-        End = SubElement( Duration, 'End')
-        End.text = self.end_time
+        # <Experiment><Individuals><Individual><UserName/>
+        User = SubElement( Individual, 'UserName')
+        User.text = self.individual_user
 
-        # <Experiment><Experimenter/>
-        Experimenter = SubElement( TheExperiment, 'Experimenter')
+        # <Experiment><DateAndTime/>
+        DateAndTime = SubElement( TheExperiment, 'DateAndTime')
 
-        # <Experiment><Experimenter><Person/>
-        Person = SubElement( Experimenter, 'Person')
+        # <Experiment><DateAndTime><DateAndTimeType/>
+        DateAndTimeType = SubElement( DateAndTime, 'DateAndTimeType')
+        DateAndTimeType.text = self.date_type
 
-        # <Experiment><Experimenter><Person><FirstName/>
-        FirstName = SubElement( Person, 'FirstName')
-        FirstName.text = self.first_name
-
-        # <Experiment><Experimenter><Person><LastName/>
-        LastName = SubElement( Person, 'LastName')
-        LastName.text = self.last_name
-  
-        # <Experiment><Experimenter><Organization/>
-        Organization = SubElement( Experimenter, 'Organization')
-        Organization.attrib['xml:lang']="en-US"
-        Organization.text = self.exp_org
+        # <Experiment><DateAndTime><Start/>
+        Start = SubElement( DateAndTime, 'Start')
+        Start.text = self.start
 
         #To print to file
         Test = ElementTree()
         Test._setroot(TheExperiment)
         Test.write('experiment.xml')
-  
+
         ##To print to terminal
         #dump(TheExperiment)
 
 
 
 ##For testing purposes##
-#newExperiment = Experiment('exp_id', 'title', 'first_name', 'last_name', 'exp_org')
+#newExperiment = Experiment('exp_authority', 'myProject', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
 #newExperiment.makeXML()
 

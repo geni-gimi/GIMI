@@ -4,12 +4,14 @@ from xml.etree.ElementTree import Element, SubElement, dump, ElementTree
 #This class creates a simple project XML containing only the mandatory items
 class Project:
     #Initializes variables
-    def __init__(self, proj_id, title, PI_first_name, PI_last_name, PI_org):
-        self.proj_id = proj_id
-        self.title = title
-        self.PI_first_name = PI_first_name
-        self.PI_last_name = PI_last_name
-        self.PI_org = PI_org
+    def __init__(self, proj_authority, name, individual_type, individual_authority, individual_user, date_type, start):
+        self.proj_authority = proj_authority
+        self.name = name
+        self.individual_type = individual_type
+        self.individual_authority = individual_authority
+        self.individual_user = individual_user
+        self.date_type = date_type
+        self.start = start
 
     #Creates XML file using ElementTree & writes it to file "project.xml"
     def makeXML(self):
@@ -19,35 +21,47 @@ class Project:
         TheProject.attrib['xmlns:xsi']="http://www.w3.org/2001/XMLSchema-instance"
         TheProject.attrib['xsi:schemaLocation']="http://geni.net/schema GENIObject.xsd"
 
-        # <Project><ID/>
-        ID = SubElement( TheProject, 'ProjectIdentifier')
-        ID.text = self.proj_id
 
-        # <Project><Title/>
-        Title = SubElement( TheProject, 'Title')
+        # <Project><Name/>
+        Name = SubElement( TheProject, 'Name')
 
-        # <Project><Title><Title2/>
-        Title2 = SubElement( Title, 'Title')
-        Title2.attrib['xml:lang']="en-US"
-        Title2.text = self.title
+        # <Project><Name><Authority/>
+        Authority = SubElement( Name, 'Authority')
+        Authority.text = self.proj_authority
 
-        # <Project><PrincipalInvestigator/>
-        PrincipalInvestigator = SubElement( TheProject, 'PrincipalInvestigator')
+        # <Project><Name><Name2/>
+        Name2 = SubElement( Name, 'Name')
+        Name2.attrib['xml:lang']="en-US"
+        Name2.text = self.name
 
-        # <Project><PrincipalInvestigator><Person/>
-        Person = SubElement( PrincipalInvestigator, 'Person')
+        # <Project><Individuals/>
+        Individuals = SubElement( TheProject, 'Individuals')
 
-        # <Project><PrincipalInvestigator><Person><FirstName/>
-        FirstName = SubElement( Person, 'FirstName')
-        FirstName.text = self.PI_first_name
+        # <Project><Individuals><Individual/>
+        Individual = SubElement( Individuals, 'Individual')
 
-        # <Project><PrincipalInvestigator><Person><LastName/>
-        LastName = SubElement( Person, 'LastName')
-        LastName.text = self.PI_last_name
+        # <Project><Individuals><Individual><Type/>
+        Type = SubElement( Individual, 'Type')
+        Type.text = self.individual_type
+
+        # <Project><Individuals><Individual><Authority/>
+        IndAuthority = SubElement( Individual, 'Authority')
+        IndAuthority.text = self.individual_authority
   
-        # <Project><PrincipalInvestigator><Organization/>
-        Organization = SubElement( PrincipalInvestigator, 'Organization')
-        Organization.text = self.PI_org
+        # <Project><Individuals><Individual><UserName/>
+        User = SubElement( Individual, 'UserName')
+        User.text = self.individual_user
+
+        # <Project><DateAndTime/>
+        DateAndTime = SubElement( TheProject, 'DateAndTime')
+
+        # <Project><DateAndTime><DateAndTimeType/>
+        DateAndTimeType = SubElement( DateAndTime, 'DateAndTimeType')
+        DateAndTimeType.text = self.date_type
+
+        # <Project><DateAndTime><Start/>
+        Start = SubElement( DateAndTime, 'Start')
+        Start.text = self.start
 
         #To print to file
         Test = ElementTree()
@@ -60,6 +74,6 @@ class Project:
 
 
 ##For testing purposes##
-#newProject = Project('project_id', 'title', 'PI_first_name', 'PI_last_name', 'PI_org')
+#newProject = Project('proj_authority', 'myProject', 'PI', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
 #newProject.makeXML()
 

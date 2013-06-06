@@ -4,11 +4,10 @@ from xml.etree.ElementTree import Element, SubElement, dump, ElementTree
 #This class creates a simple step XML containing only the mandatory items
 class Step:
     #Initializes variables
-    def __init__(self, step_seq_id, title, resource_id, slice_name):
-        self.title = title 
-        self.step_seq_id = step_seq_id
+    def __init__(self, function, resource_id):
+        self.function = function 
+        self.resource_type = resource_type
         self.resource_id = resource_id
-        self.slice_name = slice_name
 
     #Creates XML file using ElementTree & writes it to file "step.xml"
     def makeXML(self):
@@ -18,34 +17,26 @@ class Step:
         TheStep.attrib['xmlns:xsi']="http://www.w3.org/2001/XMLSchema-instance"
         TheStep.attrib['xsi:schemaLocation']="http://geni.net/schema GENIObject.xsd"
 
-        # <Step><Primary/>
-        Primary = SubElement( TheStep, 'Primary')
-        Primary.text = 'Manifest'
-  
-        # <Step><Sequence/>
-        Sequence = SubElement( TheStep, 'StepSequenceID')
-        Sequence.text = self.step_seq_id
+        # <Step><Function/>
+        Title = SubElement( TheStep, 'Function')
 
-        # <Step><Title/>
-        Title = SubElement( TheStep, 'Title')
+        # <Step><Function><Primary/>
+        Primary = SubElement( Function, 'Primary')
+        Primary.text = self.function
 
-        # <Step><Title><Title/>
-        Title2 = SubElement( TheStep, 'Title')
-        Title2.text = self.title
-
-        # <Step><Resources/>
-        Resources = SubElement( TheStep, 'Resources')
+        # <Step><GENI_resources/>
+        Resources = SubElement( TheStep, 'GENI_resources')
 
         # <Step><Resources><Resource/>
         Resource = SubElement( Resources, 'Resource')
   
         # <Step><Resources><Resource><ResourceID/>
-        ResourceID = SubElement( Resource, 'ResourceID')
-        ResourceID.text =  self.resource_id
+        ResourceType = SubElement( Resource, 'GENI_resource_type')
+        ResourceType.text =  self.resource_type
     
         # <Step><Resources><Resource><ResourceType/>
-        ResourceType = SubElement( Resource, 'ResourceType')
-        ResourceType.text = 'Slice'
+        ResourceID = SubElement( Resource, 'GENI_resource_identifier')
+        ResourceID.text = self.resource_id
 
         #To print to file
         Test = ElementTree()
@@ -59,6 +50,6 @@ class Step:
 
 
 ##For testing purposes##
-#newStep = Step('step_seq_id', 'title', 'resource_id', 'slice_name')
+#newStep = Step('wf1_design_experiment', 'slice', 'my_slice')
 #newStep.makeXML()
 
