@@ -4,9 +4,9 @@ from xml.etree.ElementTree import Element, SubElement, dump, ElementTree
 #This class creates a simple artifact XML containing only the mandatory items
 class Artifact:
     #Initializes variables
-    def __init__(self, art_type, read_me_text):
-        self.art_type = art_type
-        self.read_me_text = read_me_text
+    def __init__(self, art_type_prime, interpretation_read_me):
+        self.art_type_prime = art_type_prime
+        self.interpretation_read_me = interpretation_read_me
 
     #Creates XML file using ElementTree & writes it to file "artifact.xml"
     def makeXML(self):
@@ -21,14 +21,14 @@ class Artifact:
 
         # <Artifact><Type><Primary/>
         Primary = SubElement( Type, 'Primary')
-        Primary.text = self.art_type
+        Primary.text = self.art_type_prime
 
         # <Artifact><Interpretation/>
         Interpretation = SubElement( TheArtifact, 'Interpretation')
     
-        # <Artifact><Interpretation><Read_me_text/>
-        Read_me_text = SubElement( Interpretation, 'Read_me_text')
-        Read_me_text.text = self.read_me_text
+        # <Artifact><Interpretation><Interpretation_read_me_text/>
+        Read_me_text = SubElement( Interpretation, 'Interpretation_read_me_text')
+        Read_me_text.text = self.interpretation_read_me
 
         #To print to file
         Test = ElementTree()

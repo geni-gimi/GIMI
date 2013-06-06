@@ -4,8 +4,8 @@ from xml.etree.ElementTree import Element, SubElement, dump, ElementTree
 #This class creates a simple step XML containing only the mandatory items
 class Step:
     #Initializes variables
-    def __init__(self, function, resource_id):
-        self.function = function 
+    def __init__(self, prime_function, resource_type, resource_id):
+        self.prime_function = prime_function 
         self.resource_type = resource_type
         self.resource_id = resource_id
 
@@ -18,11 +18,11 @@ class Step:
         TheStep.attrib['xsi:schemaLocation']="http://geni.net/schema GENIObject.xsd"
 
         # <Step><Function/>
-        Title = SubElement( TheStep, 'Function')
+        Function = SubElement( TheStep, 'Function')
 
         # <Step><Function><Primary/>
         Primary = SubElement( Function, 'Primary')
-        Primary.text = self.function
+        Primary.text = self.prime_function
 
         # <Step><GENI_resources/>
         Resources = SubElement( TheStep, 'GENI_resources')
@@ -50,6 +50,6 @@ class Step:
 
 
 ##For testing purposes##
-#newStep = Step('wf1_design_experiment', 'slice', 'my_slice')
+#newStep = Step('design_experiment', 'slice', 'my_slice')
 #newStep.makeXML()
 
