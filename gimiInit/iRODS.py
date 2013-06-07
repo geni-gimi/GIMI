@@ -64,9 +64,9 @@ class iRODS:
         subprocess.check_output(['icd'])
 
     # Adds a new artifact to this experiment directory
-    def addArtifact(self, artifact, artifactLocation, prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me):
+    def addArtifact(self, artifact, artifactLocation, prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me, directory_name=None):
         self.makeArtAndStepFiles(prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me)
-        self.makeArtifactDirectory(artifact,artifactLocation)
+        self.makeArtifactDirectory(artifact,artifactLocation, directory_name)
         
 
     # Builds Artifact & Step XML files and writes them to files
@@ -79,12 +79,24 @@ class iRODS:
         newArtifact.makeXML()
 
     # Creates all directories within iRODS for this experiment and put XML files into iRODS
-    def makeArtifactDirectory(self, artifact, artifactLocation):
+    def makeArtifactDirectory(self, artifact, artifactLocation, directory_name):
         subprocess.check_output(['icd'])
         subprocess.check_output(['icd', self.exp_id])
         #add xml files to directory
-        subprocess.check_output(['imkdir', artifact])
-        subprocess.check_output(['icd', artifact])
+        if directory_name==None:
+            directory_name = artifact
+        run=1
+        directory_name_run = directory_name+'-'+str(run)
+        newDirectory=False
+        while newDirectory==False :
+            try:
+                subprocess.check_output(['imkdir', directory_name_run])
+                newDirectory=True
+                break
+            except:
+                run+=1
+                directory_name_run = directory_name+'-'+str(run)
+        subprocess.check_output(['icd', directory_name_run])
         subprocess.check_output(['iput', artifactLocation+'/'+artifact])
         subprocess.check_output(['iput', 'step.xml'])
         subprocess.check_output(['iput', 'artifact.xml'])
@@ -92,7 +104,8 @@ class iRODS:
 
     # Puts manifest into iRODS
     def pushManifest(self, manifest, manifestLocation, slicename):
-        self.addArtifact(manifest, manifestLocation, 'obtain_resources', 'slice', slicename, 'GENI_AM_API_sliver_manifest_rspec', 'interpretation_read_me')
+        directory_name='manifest_rspec'
+        self.addArtifact(manifest, manifestLocation, 'obtain_resources', 'slice', slicename, 'GENI_AM_API_sliver_manifest_rspec', 'interpretation_read_me', directory_name)
         print "Manifest has been pushed to iRODS\n"
 
       
@@ -127,11 +140,13 @@ class iRODS:
 #### TEST CODE ####
 
 # This creates an example iRODS object & creates the XML files
-#newExp = iRODS( "Project Authority", "My Project", 'proj_id', 'PI', 'Her authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z', 'exp_authority', 'myProject2', 'exp_id40', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
+#newExp = iRODS( "Project Authority", "My Project", 'proj_id', 'PI', 'Her authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z', 'exp_authority', 'myProject2', 'exp_id47', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
 #To Push manifest
-#newExp.pushManifest('TwoVMs','/home/koneil/iRODSstuff/GIMI/gimiInit','my_slice')
+#for n in range (0,5):
+    newExp.pushManifest('TwoVMs','/home/koneil/iRODSstuff/GIMI/gimiInit','my_slice')
 
-#make an initial tickets
+
+#make initial tickets
 #myTicket=newExp.makeTicket(['koneil2','koneil3'])
 #myTicket=newExp.makeTicket(expire_time='1372654800')
 #myTicket=newExp.makeTicket()
