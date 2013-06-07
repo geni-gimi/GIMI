@@ -4,9 +4,10 @@ from xml.etree.ElementTree import Element, SubElement, dump, ElementTree
 #This class creates a simple project XML containing only the mandatory items
 class Project:
     #Initializes variables
-    def __init__(self, proj_authority, name, individual_type, individual_authority, individual_user, date_time_type, start):
+    def __init__(self, proj_authority, name, proj_id, individual_type, individual_authority, individual_user, date_time_type, start):
         self.proj_authority = proj_authority
         self.name = name
+        self.proj_id = proj_id
         self.individual_type = individual_type
         self.individual_authority = individual_authority
         self.individual_user = individual_user
@@ -33,6 +34,10 @@ class Project:
         Name2 = SubElement( Name, 'Name')
         Name2.attrib['xml:lang']="en-US"
         Name2.text = self.name
+
+        # <Project><GENI_project_identifier/>
+        Proj_id = SubElement( TheProject, 'GENI_project_identifier')
+        Proj_id.text = self.proj_id
 
         # <Project><Individuals/>
         Individuals = SubElement( TheProject, 'Individuals')
@@ -77,6 +82,6 @@ class Project:
 
 
 ##For testing purposes##
-#newProject = Project('proj_authority', 'myProject', 'PI', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
+#newProject = Project('proj_authority', 'myProject', 'proj_id', 'PI', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
 #newProject.makeXML()
 

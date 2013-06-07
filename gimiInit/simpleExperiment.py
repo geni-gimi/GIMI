@@ -4,9 +4,10 @@ from xml.etree.ElementTree import Element, SubElement, dump, ElementTree
 #This class creates a simple experiment XML containing only the mandatory items
 class Experiment:
     #Initializes variables
-    def __init__(self, exp_authority, name, individual_type, individual_authority, individual_user, date_time_type, start):
+    def __init__(self, exp_authority, name, exp_id, individual_type, individual_authority, individual_user, date_time_type, start):
         self.exp_authority = exp_authority
         self.name = name
+        self.exp_id = exp_id
         self.individual_type = individual_type
         self.individual_authority = individual_authority
         self.individual_user = individual_user
@@ -33,6 +34,10 @@ class Experiment:
         Name2 = SubElement( Name, 'Name')
         Name2.attrib['xml:lang']="en-US"
         Name2.text = self.name
+
+        # <Experiment><GENI_experiment_identifier/>
+        Exp_id = SubElement( TheExperiment, 'GENI_experiment_identifier')
+        Exp_id.text = self.exp_id
 
         # <Experiment><Individuals/>
         Individuals = SubElement( TheExperiment, 'Individuals')
@@ -77,6 +82,6 @@ class Experiment:
 
 
 ##For testing purposes##
-#newExperiment = Experiment('exp_authority', 'myProject', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
+#newExperiment = Experiment('exp_authority', 'myProject', 'exp_id', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
 #newExperiment.makeXML()
 

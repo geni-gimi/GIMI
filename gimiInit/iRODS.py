@@ -13,50 +13,47 @@ import simpleArtifact
 # 
 class iRODS:
     # This creates the iRODS experiment directory with initial XML files 
-    def __init__(self, proj_id, proj_title, PI_first_name, PI_last_name, PI_org, exp_id, exp_title, exp_first_name, exp_last_name, exp_org, exp_start, exp_end, step_name, step_seq_id, resource_id, slice_name, artifact_name):
+    def __init__(self, proj_authority, proj_name, proj_id, proj_individual_type, proj_individual_authority, proj_individual_user, proj_date_time_type, proj_start, exp_authority, exp_name, exp_id, exp_individual_type, exp_individual_authority, exp_individual_user, exp_date_time_type, exp_start):
         #set variables
+        # project variables
+        self.proj_authority = proj_authority
+        self.proj_name = proj_name
         self.proj_id = proj_id
-        self.proj_title = proj_title
-        self.PI_first_name = PI_first_name
-        self.PI_last_name = PI_last_name
-        self.PI_org = PI_org
+        self.proj_individual_type = proj_individual_type
+        self.proj_individual_authority = proj_individual_authority
+        self.proj_individual_user = proj_individual_user
+        self.proj_date_time_type = proj_date_time_type
+        self.proj_start = proj_start
+        # experiment variables
+        self.exp_authority = exp_authority
+        self.exp_name = exp_name
         self.exp_id = exp_id
-        self.exp_title = exp_title
-        self.exp_first_name = exp_first_name
-        self.exp_last_name = exp_last_name
-        self.exp_org = exp_org
+        self.exp_individual_type = exp_individual_type
+        self.exp_individual_authority = exp_individual_authority
+        self.exp_individual_user= exp_individual_user
+        self.exp_date_time_type = exp_date_time_type
         self.exp_start = exp_start
-        self.exp_end = exp_end
-        self.step_name = step_name 
-        self.step_seq_id = step_seq_id
-        self.resource_id = resource_id
-        self.slice_name = slice_name
-        self.artifact_name = artifact_name
-        #write XML files
-        self.makeFiles()
-        #create directories and include initial XML files
-        self.makeDirectories()
-        print 'iRODS setup was successful\n'
-             
 
-    # Builds XML files and writes them to files
-    def makeFiles(self):
+        # write XML files
+        self.makeProjAndExpFiles()
+
+        # create directories and include initial XML files
+        self.makeExpDirectory()
+        print '\niRODS intial directory setup was successful\n'
+
+
+    # Builds Porject & Experiment XML files and writes them to files
+    def makeProjAndExpFiles(self):
         # makes project XML file
-        newProject = simpleProject.Project(self.proj_id, self.proj_title, self.PI_first_name, self.PI_last_name, self.PI_org)
+        newProject = simpleProject.Project(self.proj_authority, self.proj_name, self.proj_id, self.proj_individual_type, self.proj_individual_authority, self.proj_individual_user, self.proj_date_time_type, self.proj_start)
         newProject.makeXML()
         # makes experiment XML file
-        newExperiment = simpleExperiment.Experiment(self.exp_id, self.exp_title, self.exp_first_name, self.exp_last_name, self.exp_org, self.exp_start, self.exp_end)
+        newExperiment = simpleExperiment.Experiment(self.exp_authority, self.exp_name, self.exp_id, self.exp_individual_type, self.exp_individual_authority, self.exp_individual_user, self.exp_date_time_type, self.exp_start)
         newExperiment.makeXML()
-        # makes step XML file
-        newStep = simpleStep.Step(self.step_seq_id, self.step_name, self.resource_id, self.slice_name)
-        newStep.makeXML()
-        # makes artifact XML file
-        newArtifact = simpleArtifact.Artifact(self.artifact_name)
-        newArtifact.makeXML()
 
 
-    # Creates all directories within iRODS for this experiment and put XML files into iRODS
-    def makeDirectories(self):
+    # Creates directory within iRODS for this experiment and put XML files into iRODS
+    def makeExpDirectory(self):
         subprocess.check_output(['icd'])
         #make experiment directory
         subprocess.check_output(['imkdir', self.exp_id])  
@@ -64,12 +61,40 @@ class iRODS:
         #add xml files to directory
         subprocess.check_output(['iput', 'project.xml'])
         subprocess.check_output(['iput', 'experiment.xml'])
+        subprocess.check_output(['icd'])
+
+    # Adds a new artifact to this experiment directory
+    def addArtifact(self, artifact, artifactLocation, prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me):
+        self.makeArtAndStepFiles(prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me)
+        self.makeArtifactDirectory(artifact,artifactLocation)
+        
+
+    # Builds Artifact & Step XML files and writes them to files
+    def makeArtAndStepFiles(self,prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me):
+        # makes step XML file
+        newStep = simpleStep.Step(prime_function, resource_type, resource_id)
+        newStep.makeXML()
+        # makes artifact XML file
+        newArtifact = simpleArtifact.Artifact(art_type_prime, interpretation_read_me)
+        newArtifact.makeXML()
+
+    # Creates all directories within iRODS for this experiment and put XML files into iRODS
+    def makeArtifactDirectory(self, artifact, artifactLocation):
+        subprocess.check_output(['icd'])
+        subprocess.check_output(['icd', self.exp_id])
+        #add xml files to directory
+        subprocess.check_output(['imkdir', artifact])
+        subprocess.check_output(['icd', artifact])
+        subprocess.check_output(['iput', artifactLocation+'/'+artifact])
         subprocess.check_output(['iput', 'step.xml'])
-        subprocess.check_output(['imkdir', 'artifact'])
-        #make artifact directory within the experiment directory
-        subprocess.check_output(['icd', 'artifact'])
         subprocess.check_output(['iput', 'artifact.xml'])
         subprocess.check_output(['icd'])
+
+    # Puts manifest into iRODS
+    def pushManifest(self, manifest, manifestLocation, slicename):
+        self.addArtifact(manifest, manifestLocation, 'obtain_resources', 'slice', slicename, 'GENI_AM_API_sliver_manifest_rspec', 'interpretation_read_me')
+        print "Manifest has been pushed to iRODS\n"
+
       
 ########## TICKETS ##########
     
@@ -89,46 +114,28 @@ class iRODS:
         print "Ticket for new directory: " + ticket
         return ticket 
 
-    # Postpones the time at which the iticket expires
+    # Postpones the time at which the iticket expires.
     # expire_time must be UNIX timestamp
     def extendTicket(self, ticket, expire_time):
         subprocess.check_output(['iticket', 'mod', ticket, 'expire', expire_time])
         print "Expiration date is now set to: " + expire_time
         return ticket 
   ####################################
-
-    # Puts manifest into iRODS
-    def pushManifest(self, manifest):
-        subprocess.check_output(['icd', self.exp_id])
-        subprocess.check_output(['iput', manifest])
-        newArtifact = simpleArtifact.Artifact(manifest)
-        newArtifact.makeXML()
-        subprocess.check_output(['iput', manifest+'-artifact.xml'])
-        print "Manifest has been pushed to iRODS"
-
-
-#    def pushOMlScripts(self, OML):
-#        subprocess.check_output(['icd', self.exp_id])
-#        for x in OML:
-#            subprocess.check_output(['iput', OML])
-#            newArtifact = simpleArtifact.Artifact(OML)
-#            newArtifact.makeXML()
-#            subprocess.check_output(['iput', 'OML-artifact.xml'])
-#        print "OML scripts have been pushed to iRODS"
         
 
 
-#### SAMPLE CODE ####
+#### TEST CODE ####
 
-## This creates an example iRODS object & creates the XML files
-#newExp = iRODS('proj_id', 'proj_title', 'PI_first_name', 'PI_last_name', 'PI_org', 'exp_id27', 'exp_title', 'exp_first_name', 'exp_last_name', 'exp_org', 'exp_start', 'exp_end', 'step_name', 'step_seq_id', 'resource_id', 'slice_name', 'artifact_name')
+# This creates an example iRODS object & creates the XML files
+#newExp = iRODS( "Project Authority", "My Project", 'proj_id', 'PI', 'Her authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z', 'exp_authority', 'myProject2', 'exp_id40', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
+#To Push manifest
+#newExp.pushManifest('TwoVMs','/home/koneil/iRODSstuff/GIMI/gimiInit','my_slice')
 
 #make an initial tickets
 #myTicket=newExp.makeTicket(['koneil2','koneil3'])
 #myTicket=newExp.makeTicket(expire_time='1372654800')
 #myTicket=newExp.makeTicket()
 
-##To Push manifest
-#newExp.pushManifest('TwoVMs')
+
 
 
