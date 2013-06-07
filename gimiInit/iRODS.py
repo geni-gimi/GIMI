@@ -143,7 +143,7 @@ class iRODS:
 #newExp = iRODS( "Project Authority", "My Project", 'proj_id', 'PI', 'Her authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z', 'exp_authority', 'myProject2', 'exp_id47', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
 #To Push manifest
 #for n in range (0,5):
-    newExp.pushManifest('TwoVMs','/home/koneil/iRODSstuff/GIMI/gimiInit','my_slice')
+#    newExp.pushManifest('TwoVMs','/home/koneil/iRODSstuff/GIMI/gimiInit','my_slice')
 
 
 #make initial tickets
