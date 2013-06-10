@@ -4,7 +4,7 @@ from xml.etree.ElementTree import Element, SubElement, dump, ElementTree
 #This class creates a simple step XML containing only the mandatory items
 class Step:
     #Initializes variables
-    def __init__(self, prime_function, resource_type, resource_id):
+    def __init__(self, prime_function, resource_type=None, resource_id=None):
         self.prime_function = prime_function 
         self.resource_type = resource_type
         self.resource_id = resource_id
@@ -24,19 +24,20 @@ class Step:
         Primary = SubElement( Function, 'Primary')
         Primary.text = self.prime_function
 
-        # <Step><GENI_resources/>
-        Resources = SubElement( TheStep, 'GENI_resources')
+        if self.resource_type!=None:
+            # <Step><GENI_resources/>
+            Resources = SubElement( TheStep, 'GENI_resources')
 
-        # <Step><Resources><Resource/>
-        Resource = SubElement( Resources, 'Resource')
+            # <Step><Resources><Resource/>
+            Resource = SubElement( Resources, 'Resource')
   
-        # <Step><Resources><Resource><ResourceID/>
-        ResourceType = SubElement( Resource, 'GENI_resource_type')
-        ResourceType.text =  self.resource_type
+            # <Step><Resources><Resource><ResourceID/>
+            ResourceType = SubElement( Resource, 'GENI_resource_type')
+            ResourceType.text =  self.resource_type
     
-        # <Step><Resources><Resource><ResourceType/>
-        ResourceID = SubElement( Resource, 'GENI_resource_identifier')
-        ResourceID.text = self.resource_id
+            # <Step><Resources><Resource><ResourceType/>
+            ResourceID = SubElement( Resource, 'GENI_resource_identifier')
+            ResourceID.text = self.resource_id
 
         #To print to file
         Test = ElementTree()
