@@ -4,11 +4,11 @@ from xml.etree.ElementTree import Element, SubElement, dump, ElementTree
 #This class creates a simple experiment XML containing only the mandatory items
 class Experiment:
     #Initializes variables
-    def __init__(self, exp_authority, name, exp_id, individual_type, individual_authority, individual_user, date_time_type, start):
+    def __init__(self, exp_authority, name, exp_id, individual_role, individual_authority, individual_user, date_time_type, start):
         self.exp_authority = exp_authority
         self.name = name
         self.exp_id = exp_id
-        self.individual_type = individual_type
+        self.individual_role = individual_role
         self.individual_authority = individual_authority
         self.individual_user = individual_user
         self.date_time_type = date_time_type
@@ -45,9 +45,9 @@ class Experiment:
         # <Experiment><Individuals><Individual/>
         Individual = SubElement( Individuals, 'Individual')
 
-        # <Experiment><Individuals><Individual><Type/>
-        Type = SubElement( Individual, 'Type')
-        Type.text = self.individual_type
+        # <Experiment><Individuals><Individual><Role/>
+        Role = SubElement( Individual, 'Role')
+        Role.text = self.individual_role
 
         # <Experiment><Individuals><Individual><Authority/>
         IndAuthority = SubElement( Individual, 'Authority')

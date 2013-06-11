@@ -4,11 +4,11 @@ from xml.etree.ElementTree import Element, SubElement, dump, ElementTree
 #This class creates a simple project XML containing only the mandatory items
 class Project:
     #Initializes variables
-    def __init__(self, proj_authority, name, proj_id, individual_type, individual_authority, individual_user, date_time_type, start):
+    def __init__(self, proj_authority, name, proj_id, individual_role, individual_authority, individual_user, date_time_type, start):
         self.proj_authority = proj_authority
         self.name = name
         self.proj_id = proj_id
-        self.individual_type = individual_type
+        self.individual_role = individual_role
         self.individual_authority = individual_authority
         self.individual_user = individual_user
         self.date_time_type = date_time_type
@@ -45,9 +45,9 @@ class Project:
         # <Project><Individuals><Individual/>
         Individual = SubElement( Individuals, 'Individual')
 
-        # <Project><Individuals><Individual><Type/>
-        Type = SubElement( Individual, 'Type')
-        Type.text = self.individual_type
+        # <Project><Individuals><Individual><Role/>
+        Role = SubElement( Individual, 'Role')
+        Role.text = self.individual_role
 
         # <Project><Individuals><Individual><Authority/>
         IndAuthority = SubElement( Individual, 'Authority')
