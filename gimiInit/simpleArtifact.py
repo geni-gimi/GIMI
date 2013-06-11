@@ -33,14 +33,33 @@ class Artifact:
         #To print to file
         Test = ElementTree()
         Test._setroot(TheArtifact)
+        root = Test.getroot()
+        self.indent(root)
         Test.write('artifact.xml')
 
         ##To print to terminal
-        #dump(TheArtifact)
+        #dump(root)
+
+
+    # ElementTree code to indent for pretty printing
+    def indent(self,elem, level=0):
+        i = "\n" + level*"  "
+        if len(elem):
+            if not elem.text or not elem.text.strip():
+                elem.text = i + "  "
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = i
+            for elem in elem:
+                self.indent(elem, level+1)
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = i
+        else:
+            if level and (not elem.tail or not elem.tail.strip()):
+                elem.tail = i
 
 
 
 ##For testing purposes##
-#newArtifact = Artifact('GENI_AM_API_silver_manifest_rspec', 'read_me_text')
-#newArtifact.makeXML()
+newArtifact = Artifact('GENI_AM_API_silver_manifest_rspec', 'read_me_text')
+newArtifact.makeXML()
 

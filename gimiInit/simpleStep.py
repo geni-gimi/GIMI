@@ -42,15 +42,33 @@ class Step:
         #To print to file
         Test = ElementTree()
         Test._setroot(TheStep)
+        root = Test.getroot()
+        self.indent(root)
         Test.write('step.xml')
-  
-  
+
         ##To print to terminal
-        #dump(TheStep)
+        #dump(root)
+
+
+    # ElementTree code to indent for pretty printing
+    def indent(self,elem, level=0):
+        i = "\n" + level*"  "
+        if len(elem):
+            if not elem.text or not elem.text.strip():
+                elem.text = i + "  "
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = i
+            for elem in elem:
+                self.indent(elem, level+1)
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = i
+        else:
+            if level and (not elem.tail or not elem.tail.strip()):
+                elem.tail = i
 
 
 
 ##For testing purposes##
-#newStep = Step('design_experiment', 'slice', 'my_slice')
-#newStep.makeXML()
+newStep = Step('design_experiment', 'slice', 'my_slice')
+newStep.makeXML()
 

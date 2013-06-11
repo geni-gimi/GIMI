@@ -71,17 +71,38 @@ class Experiment:
         Start = SubElement( Date_and_time, 'Date_time_start')
         Start.text = self.start
 
+
         #To print to file
         Test = ElementTree()
         Test._setroot(TheExperiment)
+        root = Test.getroot()
+        self.indent(root)
         Test.write('experiment.xml')
 
         ##To print to terminal
-        #dump(TheExperiment)
+        #dump(root)
+
+
+    # ElementTree code to indent for pretty printing
+    def indent(self,elem, level=0):
+        i = "\n" + level*"  "
+        if len(elem):
+            if not elem.text or not elem.text.strip():
+                elem.text = i + "  "
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = i
+            for elem in elem:
+                self.indent(elem, level+1)
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = i
+        else:
+            if level and (not elem.tail or not elem.tail.strip()):
+                elem.tail = i
+
 
 
 
 ##For testing purposes##
-#newExperiment = Experiment('exp_authority', 'myProject', 'exp_id', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
-#newExperiment.makeXML()
+newExperiment = Experiment('exp_authority', 'myProject', 'exp_id', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
+newExperiment.makeXML()
 
