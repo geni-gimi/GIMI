@@ -102,6 +102,6 @@ class Project:
 
 
 ##For testing purposes##
-newProject = Project('proj_authority', 'myProject', 'proj_id', 'PI', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
-newProject.makeXML()
+#newProject = Project('proj_authority', 'myProject', 'proj_id', 'PI', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
+#newProject.makeXML()
 

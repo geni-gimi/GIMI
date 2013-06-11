@@ -103,6 +103,6 @@ class Experiment:
 
 
 ##For testing purposes##
-newExperiment = Experiment('exp_authority', 'myProject', 'exp_id', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
-newExperiment.makeXML()
+#newExperiment = Experiment('exp_authority', 'myProject', 'exp_id', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
+#newExperiment.makeXML()
 

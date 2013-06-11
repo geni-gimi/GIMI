@@ -60,6 +60,6 @@ class Artifact:
 
 
 ##For testing purposes##
-newArtifact = Artifact('GENI_AM_API_silver_manifest_rspec', 'read_me_text')
-newArtifact.makeXML()
+#newArtifact = Artifact('GENI_AM_API_silver_manifest_rspec', 'read_me_text')
+#newArtifact.makeXML()
 

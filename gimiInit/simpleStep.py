@@ -69,6 +69,6 @@ class Step:
 
 
 ##For testing purposes##
-newStep = Step('design_experiment', 'slice', 'my_slice')
-newStep.makeXML()
+#newStep = Step('design_experiment', 'slice', 'my_slice')
+#newStep.makeXML()
 
