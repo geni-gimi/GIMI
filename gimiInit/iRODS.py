@@ -82,7 +82,7 @@ class iRODS:
     def makeArtifactDirectory(self, artifact, artifactLocation, directory_name):
         subprocess.check_output(['icd'])
         subprocess.check_output(['icd', self.exp_id])
-        #add xml files to directory
+        # name directory uniquely
         if directory_name==None:
             directory_name = artifact
         run=1
@@ -97,6 +97,7 @@ class iRODS:
                 run+=1
                 directory_name_run = directory_name+'-'+str(run)
         subprocess.check_output(['icd', directory_name_run])
+        #add artifact & xml files to directory
         subprocess.check_output(['iput', artifactLocation+'/'+artifact])
         subprocess.check_output(['iput', 'step.xml'])
         subprocess.check_output(['iput', 'artifact.xml'])
@@ -107,6 +108,22 @@ class iRODS:
         directory_name='manifest_rspec'
         self.addArtifact(manifest, manifestLocation, 'obtain_resources', 'slice', slicename, 'GENI_AM_API_sliver_manifest_rspec', 'interpretation_read_me', directory_name)
         print "Manifest has been pushed to iRODS\n"
+
+
+    # Puts intial OMF scripts into iRODS
+    def pushOMFs(self, OMF_source, OMF_destination):
+        self.makeArtAndStepFiles('design_experiment', None, None, 'orchestrate_script', 'interpretation_read_me')
+        subprocess.check_output(['icd'])
+        subprocess.check_output(['icd', OMF_destination])
+        subprocess.check_output(['imkdir', 'template_OMF_scripts'])
+        subprocess.check_output(['icd', 'template_OMF_scripts'])
+        #add OMF scripts to directory
+        subprocess.check_output(['iput', OMF_source, '-r'])
+        #add xml files to directory
+        subprocess.check_output(['iput', 'step.xml'])
+        subprocess.check_output(['iput', 'artifact.xml'])
+        subprocess.check_output(['icd'])
+        print "OMF scripts have been pushed to iRODS\n"
 
       
 ########## TICKETS ##########
@@ -132,7 +149,13 @@ class iRODS:
     def extendTicket(self, ticket, expire_time):
         subprocess.check_output(['iticket', 'mod', ticket, 'expire', expire_time])
         print "Expiration date is now set to: " + expire_time
-        return ticket 
+        return ticket
+
+    # Adds user to list of users with access to ticket
+    def addTicketUser (self, ticket, user):
+        subprocess.check_output(['iticket', 'mod', ticket, 'add', 'user', user])
+        print "Ticket access granted to: " + user
+        return ticket
   ####################################
         
 
@@ -140,11 +163,10 @@ class iRODS:
 #### TEST CODE ####
 
 # This creates an example iRODS object & creates the XML files
-#newExp = iRODS( "Project Authority", "My Project", 'proj_id', 'PI', 'Her authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z', 'exp_authority', 'myProject2', 'exp_id47', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
+#newExp = iRODS( "Project Authority", "My Project", 'proj_id', 'PI', 'Her authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z', 'exp_authority', 'myProject2', 'exp_id54', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
 #To Push manifest
-#for n in range (0,5):
-#    newExp.pushManifest('TwoVMs','/home/koneil/iRODSstuff/GIMI/gimiInit','my_slice')
-
+#newExp.pushManifest('TwoVMs','/home/koneil/iRODSstuff/GIMI/gimiInit','my_slice')
+#newExp.pushOMFs('/home/koneil/rspecs', '/tempZone/home/koneil1/'+newExp.exp_id)
 
 #make initial tickets
 #myTicket=newExp.makeTicket(['koneil2','koneil3'])

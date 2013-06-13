@@ -71,13 +71,33 @@ class Project:
         Start = SubElement( Date_and_time, 'Date_time_start')
         Start.text = self.start
 
+
         #To print to file
         Test = ElementTree()
         Test._setroot(TheProject)
+        root = Test.getroot()
+        self.indent(root)
         Test.write('project.xml')
 
         ##To print to terminal
-        #dump(TheProject)
+        #dump(root)
+
+
+    # ElementTree code to indent for pretty printing
+    def indent(self,elem, level=0):
+        i = "\n" + level*"  "
+        if len(elem):
+            if not elem.text or not elem.text.strip():
+                elem.text = i + "  "
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = i
+            for elem in elem:
+                self.indent(elem, level+1)
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = i
+        else:
+            if level and (not elem.tail or not elem.tail.strip()):
+                elem.tail = i
 
 
 
