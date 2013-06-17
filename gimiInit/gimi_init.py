@@ -20,6 +20,7 @@ import sys
 import time
 import subprocess
 import iRODS
+import gimiREST
 
 #import urllib
 #import urllib2
@@ -55,22 +56,23 @@ print("Initializing iRODS")
 irodsenv = subprocess.check_output(['ienv'])
 print irodsenv
 
-os.system("iinit")
-
-#while True:
-#p = sub.Popen('iinit',stdout=sub.PIPE,stderr=sub.PIPE)
-#output, errors = p.communicate()
-
-#if "CAT_INVALID_AUTHENTICATION" in output:
-#    print output
-
-#else: 
-#    continue
-
+while True:
+    os.system("iinit")
+    p = subprocess.Popen('ils', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    ilsoutput, ilserrors = p.communicate()
+#    print errors
+    if not "CAT_INVALID_AUTHENTICATION" in ilserrors:
+        break
+    else:
+        print ("Well, wrong password, please try again")
 
 username = raw_input("Enter your GENI username: \n")
 
-os.system("omni.py listmyslices ")
+p = subprocess.Popen(['omni.py', 'listmyslices'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+listmyslicesOutput, listmyslicesErrors = p.communicate()
+
+print listmyslicesErrors
+
 
 slicename = raw_input("Please enter your preferred slice name for this experiment: \n")
 
@@ -79,7 +81,6 @@ expName = raw_input("Enter your experiment name: \n")
 #Experiment ID = Experiment name + slice name + time (time stamp use time.time())
 expTime = str(time.strftime("%Y-%m-%dT%H:%M:%S",time.localtime(time.time())))
 expId = str(username) + "-" + str(expName) + "-" + expTime
-
 
 print ("derived experiment ID: " + expId)
 
@@ -93,10 +94,8 @@ os.system("omni.py listresources " + slicename + " -a pg-utah -o --outputfile=" 
 
 newRods = iRODS.iRODS('proj_authority', 'proj_name', 'proj_id', 'PI', 'proj_individual_authority', 'proj_individual_user', 'proj_date_time_type', 'proj_start', 'exp_authority', expName, expId, 'experimenter', exp_org, username, 'iso8601', expTime)
 #make an initial ticket
-#myTicket=newExp.makeTicket(['koneil2','koneil3'], '1372654800')
 
 myTicket=newRods.makeTicket(expire_time='1379654800')
-#myTicket=newExp.makeTicket()
 
 while True:
     pushManifestOption = raw_input("Do you want to push manifest to iRODS? (Yes or No) \n")
@@ -113,3 +112,5 @@ while True:
         break
     else:
         print ("Please answer Yes or No")
+        
+restInt = gimiREST.REST("emmy9.casa.umass.edu", "8002", workdirectory, expId)
