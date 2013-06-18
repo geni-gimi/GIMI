@@ -15,7 +15,7 @@ class Project:
         self.start = start
 
     #Creates XML file using ElementTree & writes it to file "project.xml"
-    def makeXML(self):
+    def makeXML(self, work_directory):
         # </Project>
         TheProject =Element( 'Project')
         TheProject.attrib['xmlns']="http://geni.net/schema"
@@ -77,7 +77,7 @@ class Project:
         Test._setroot(TheProject)
         root = Test.getroot()
         self.indent(root)
-        Test.write('project.xml')
+        Test.write(work_directory+'/project.xml')
 
         ##To print to terminal
         #dump(root)
@@ -103,5 +103,5 @@ class Project:
 
 ##For testing purposes##
 #newProject = Project('proj_authority', 'myProject', 'proj_id', 'PI', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
-#newProject.makeXML()
+#newProject.makeXML('/home/koneil/iRODSstuff/tmp')
 

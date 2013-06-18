@@ -15,7 +15,7 @@ class Experiment:
         self.start = start
 
     #Creates XML file using ElementTree & writes it to file "experiment.xml"
-    def makeXML(self):
+    def makeXML(self, work_directory):
         # </Experiment>
         TheExperiment =Element( 'Experiment')
         TheExperiment.attrib['xmlns']="http://geni.net/schema"
@@ -77,7 +77,7 @@ class Experiment:
         Test._setroot(TheExperiment)
         root = Test.getroot()
         self.indent(root)
-        Test.write('experiment.xml')
+        Test.write(work_directory+'/experiment.xml')
 
         ##To print to terminal
         #dump(root)
@@ -104,5 +104,5 @@ class Experiment:
 
 ##For testing purposes##
 #newExperiment = Experiment('exp_authority', 'myProject', 'exp_id', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
-#newExperiment.makeXML()
+#newExperiment.makeXML('/home/koneil/iRODSstuff/tmp')
 

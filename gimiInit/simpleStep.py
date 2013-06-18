@@ -10,7 +10,7 @@ class Step:
         self.resource_id = resource_id
 
     #Creates XML file using ElementTree & writes it to file "step.xml"
-    def makeXML(self):
+    def makeXML(self, work_directory):
         # </Step>
         TheStep = Element( 'Step' )
         TheStep.attrib['xmlns']="http://geni.net/schema"
@@ -44,7 +44,7 @@ class Step:
         Test._setroot(TheStep)
         root = Test.getroot()
         self.indent(root)
-        Test.write('step.xml')
+        Test.write(work_directory+'/step.xml')
 
         ##To print to terminal
         #dump(root)
@@ -70,5 +70,5 @@ class Step:
 
 ##For testing purposes##
 #newStep = Step('design_experiment', 'slice', 'my_slice')
-#newStep.makeXML()
+#newStep.makeXML('/home/koneil/iRODSstuff/tmp')
 

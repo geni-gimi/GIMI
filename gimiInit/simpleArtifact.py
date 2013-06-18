@@ -9,7 +9,7 @@ class Artifact:
         self.interpretation_read_me = interpretation_read_me
 
     #Creates XML file using ElementTree & writes it to file "artifact.xml"
-    def makeXML(self):
+    def makeXML(self, work_directory):
         # </Artifact>
         TheArtifact = Element( 'Artifact')
         TheArtifact.attrib['xmlns']="http://geni.net/schema"
@@ -35,7 +35,7 @@ class Artifact:
         Test._setroot(TheArtifact)
         root = Test.getroot()
         self.indent(root)
-        Test.write('artifact.xml')
+        Test.write(work_directory+'/artifact.xml')
 
         ##To print to terminal
         #dump(root)
@@ -61,5 +61,5 @@ class Artifact:
 
 ##For testing purposes##
 #newArtifact = Artifact('GENI_AM_API_silver_manifest_rspec', 'read_me_text')
-#newArtifact.makeXML()
+#newArtifact.makeXML('/home/koneil/iRODSstuff/tmp')
 
