@@ -192,9 +192,9 @@ class iRODS:
 #### TEST CODE ####
 
 # This creates an example iRODS object & creates the XML files
-newExp = iRODS('/home/koneil/iRODSstuff/tmp', "Project Authority", "My Project", 'proj_id', 'PI', 'Her authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z', 'exp_authority', 'myProject2', 'exp_id70', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
+#newExp = iRODS('/home/koneil/iRODSstuff/tmp', "Project Authority", "My Project", 'proj_id', 'PI', 'Her authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z', 'exp_authority', 'myProject2', 'exp_id70', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
 #To Push manifest
-newExp.pushManifest('/home/koneil/iRODSstuff/manifests','my_slice')
+#newExp.pushManifest('/home/koneil/iRODSstuff/manifests','my_slice')
 #newExp.pushOMFs()
 
 #make initial tickets
