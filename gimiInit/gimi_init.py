@@ -21,6 +21,7 @@ import time
 import subprocess
 import iRODS
 import gimiREST
+import gimi_util
 
 #import urllib
 #import urllib2
@@ -28,7 +29,7 @@ import gimiREST
 
 #Set up working directory
 print("Welcome to the GIMI initialization script, please make sure to install omni and set up your credential before running this script")
-workdirectory = raw_input("Enter your preferred experiment path (please use absolute path, e.g., /home/geni/your/dir/): \n")
+workdirectory = raw_input("Enter your preferred experiment path (please use absolute path, e.g., /home/geni/your/dir): \n")
 
 if (os.path.exists(workdirectory) == False):
     
@@ -43,9 +44,8 @@ if (os.path.exists(workdirectory) == False):
         else: 
             print ("Please answer Yes or No")
 
-#Get user information (experimenter name & organization)
+#TODO: Get user information (experimenter name & organization)
 
-#TODO: get project name from urn
 experimenterName = raw_input("Tell us about yourself: enter your name: \n")
 
 exp_org= raw_input ("Your organization: \n")
@@ -54,7 +54,7 @@ exp_org= raw_input ("Your organization: \n")
 print("Initializing iRODS")
 
 irodsenv = subprocess.check_output(['ienv'])
-print irodsenv
+print "Your current iRODS configuration: \n" + irodsenv
 
 while True:
     os.system("iinit")
@@ -71,10 +71,14 @@ username = raw_input("Enter your GENI username: \n")
 p = subprocess.Popen(['omni.py', 'listmyslices'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 listmyslicesOutput, listmyslicesErrors = p.communicate()
 
-print listmyslicesErrors
+#print listmyslicesErrors
+(returned_projectID, returned_slicename) = gimi_util.listmyslices_output_parse(listmyslicesErrors) 
+#print projectID
+projectID = ''.join(str(returned_projectID[1]))# for x in returned_projectID)
+slicename = '\n'.join(str(x) for x in returned_slicename)
 
-
-slicename = raw_input("Please enter your preferred slice name for this experiment: \n")
+print ("Your project ID is: \n" + projectID)
+slicename = raw_input("Your active slice names:\n" + slicename + "\nPlease enter your preferred slice name for this experiment: \n")
 
 expName = raw_input("Enter your experiment name: \n")
 
@@ -88,7 +92,9 @@ print ("derived experiment ID: " + expId)
 print ("retrieving the manifest rspec...")
 
 manifestName="manifest-"+ expId + ".rspec"
-os.system("omni.py listresources " + slicename + " -a pg-utah -o --outputfile=" + workdirectory + "/"+manifestName)
+manifest_workdirectory = workdirectory + "/manifests/"
+
+os.system("omni.py listresources " + slicename + " -a pg-utah -o --outputfile=" + manifest_workdirectory + manifestName)
         
 # This creates an example iRODS object & creates the XML files & makes a ticket
 
@@ -102,10 +108,7 @@ while True:
  
     if (pushManifestOption in ("Yes", "Y", "yes", "y")):
         #Push to iRODS
-        newRods.pushManifest(manifestName, workdirectory, slicename)
-#        subprocess.check_output(['icd', expId])
-#        subprocess.check_output(['iput', workdirectory + "/" + manifestName])
-#        print ("Manifest " + manifestName + " has been pushed to iRODS")
+        newRods.pushManifest(manifest_workdirectory, slicename)
         break
  
     elif (pushManifestOption in ("No", "N", "no", "n")):
