@@ -40,6 +40,13 @@ def write_to_log(message,print_also):
 
     return
 
+def get_user(theOutput):
+    indexOfUser=theOutput.find("User ")
+    userInfo=theOutput[indexOfUser:]
+    gettingUser=userInfo.split('\'')
+    user=gettingUser[1]          ## user is your username
+    return user
+
 def listmyslices_output_parse(theOutput):
     moreSlices=True
     rev_slices=[]
@@ -65,3 +72,17 @@ def listmyslices_output_parse(theOutput):
     slices = rev_slices[::-1]
     return projects, slices
 
+def getRspecs(output):
+    theOutput=output
+    indexOfRspec=0
+    rspecs=[]
+    while(True):
+        indexOfRspec=theOutput.find('<rspec')
+        if indexOfRspec==-1:
+            break
+        theOutput=theOutput[indexOfRspec:]
+        indexOfEnd=theOutput.find('</rspec>')
+        oneRspec=theOutput[:indexOfEnd+8]
+        rspecs.append(oneRspec)
+        theOutput=theOutput[indexOfEnd:]
+    return rspecs
