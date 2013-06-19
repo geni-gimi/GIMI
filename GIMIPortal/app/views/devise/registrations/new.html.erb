@@ -12,8 +12,20 @@
   <div><%= f.label :password_confirmation %><br />
   <%= f.password_field :password_confirmation %></div>
 
+  <div><%= f.label :first_name %><br />
+  <%= f.text_field :first_name %></div>
+
+  <div><%= f.label :last_name %><br />
+  <%= f.text_field :last_name %></div>
+
   <div><%= f.label :username %><br />
   <%= f.text_field :username %></div>
+<br />
+  Please provide the subject of your SSL certificate to be used to access iRODS.<br />
+  To obtain this information in Linux, you can execute the command<br />
+  <i>openssl x509 -in genicert.pem -subject -noout</i><br />
+  where genicert.pem is the certificate you have downloaded from your GENI slice authority.<br />
+<br />
 
   <div><%= f.label :cert_identity %><br />
   <%= f.text_field :dname %></div>

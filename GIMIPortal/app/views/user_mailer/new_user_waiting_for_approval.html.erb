@@ -4,10 +4,13 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-    <h1>New request for account at GIMI Portal, <%= @user.username %></h1>
+    <h1>New request for account at GIMI Portal</h1>
     <p>
-      Please create an account for user <%= @user.username %>,
-      set account to approved, and send an email to <%= @user.email %>.<br>
+      Please create an account for the following user,
+      set account to approved, and send an email when it is ready.<br>
+      Name = <%= @user.first_name %> <%= @user.last_name %><br>
+      Username = <%= @user.username %><br>
+      Email =  <%= @user.email %><br>
       Certificate identity = <%= @user.dname %><br>
     </p>
   </body>

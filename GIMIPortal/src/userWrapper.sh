@@ -10,9 +10,13 @@ if [ "${ACTION}" = "start" ]; then
     OMF_HOME=${LWHOME}/omf_web
     
     [[ -s "/home/$UNAME/.rvm/scripts/rvm" ]] && . "/home/$UNAME/.rvm/scripts/rvm"
-    rvm use 1.9.3 > /dev/null
+    rvm use 1.9.3-p385 > /dev/null
 
-    nohup ruby -I $LABWIKI_HOME/lib -I $OMF_HOME/lib $LABWIKI_HOME/bin/labwiki --lw-config /home/${UNAME}/exogeni.yaml --port $LWPORT --user $UNAME start > /tmp/labwiki$LWPORT.log &
+    export irodsEnvFile=/home/$UNAME/.irods/.irodsEnv
+    export PATH=/home/shu/iRODS/clients/icommands/bin:$PATH
+
+#    nohup ruby -I $LABWIKI_HOME/lib -I $OMF_HOME/lib $LABWIKI_HOME/bin/labwiki --lw-config /home/${UNAME}/exogeni.yaml --port $LWPORT --user $UNAME start > /tmp/labwiki$LWPORT.log &
+    nohup ruby -I $LABWIKI_HOME/lib -I $OMF_HOME/lib $LABWIKI_HOME/lib/labwiki.rb --lw-config /home/${UNAME}/exogeni.yaml --port $LWPORT --user $UNAME start > /tmp/labwiki$LWPORT.log &
 
     lwpid=$!
 
@@ -24,7 +28,7 @@ elif [ "${ACTION}" = "stop" ]; then
 
     ps -p ${lwpid}
     if [ $? -eq 0 ]; then
-        kill $lwpid
+        kill -9 $lwpid
     fi
 
     rm /var/run/labwiki/labwiki${LWPORT}.pid
