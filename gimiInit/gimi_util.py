@@ -135,7 +135,7 @@ def callIinit():
         print "Your password was incorrect."
         again = raw_input("Would you like to try again?(Yes or No)")
         if (again in ("Yes", "Y", "yes", "y")):
-            callIinit()
+            return callIinit()
         elif (again in ("No", "N", "no", "n")):
             return False
         else:
@@ -144,7 +144,7 @@ def callIinit():
         print "Your hostname was incorrect."
         again = raw_input("Would you like to try again?(Yes or No)")
         if (again in ("Yes", "Y", "yes", "y")):
-            callIinit()
+            return callIinit()
         elif (again in ("No", "N", "no", "n")):
             return False
         else:
@@ -153,7 +153,7 @@ def callIinit():
         print "Your port number was incorrect or the server is down."
         again = raw_input("Would you like to try again?(Yes or No)")
         if (again in ("Yes", "Y", "yes", "y")):
-            callIinit()
+            return callIinit()
         elif (again in ("No", "N", "no", "n")):
             return False
         else:
@@ -162,7 +162,7 @@ def callIinit():
         print "Your username, zone, or password was incorrect."
         again = raw_input("Would you like to try again?(Yes or No)")
         if (again in ("Yes", "Y", "yes", "y")):
-            callIinit()
+            return callIinit()
         elif (again in ("No", "N", "no", "n")):
             return False
         else:
