@@ -16,6 +16,8 @@
 
 
 import time
+import pexpect
+import getpass
 
 printtoscreen=1
 dontprinttoscreen=0
@@ -86,3 +88,86 @@ def getRspecs(output):
         rspecs.append(oneRspec)
         theOutput=theOutput[indexOfEnd:]
     return rspecs
+
+# Initializes iRODS
+def callIinit():
+    #checks if iRODS is already intialized
+    try:
+        p=pexpect.spawn('ils')
+    #returns False if iRODS isn't installed 
+    #or there is no path to the icommands
+    except: 
+        print "ERROR: unable to access iRODS icommands"
+        return False
+    j=p.expect(['USER_RODS_HOST_EMPTY', pexpect.EOF])
+    #returns True if user has already intialized iRODS
+    if j==1:
+        print "iRODS already initialized"
+        return True
+    p=pexpect.spawn('iinit')
+    i=p.expect(['Enter your current iRODS password:','.*One or more fields in your iRODS.*', pexpect.TIMEOUT])
+    #returns false if the call to iinit timesout
+    if i==2:
+        print 'ERROR!'
+        print 'iRODS could not login. Here is what iRODS said:'
+        print child.before, child.after
+        return False
+    #gives user setup information to iRODS
+    if i==1:
+        hostname = raw_input("Hostname of server:")
+        p.sendline(hostname)
+        p.expect(['Enter the port number:'])
+        port = raw_input("Port number:")
+        p.sendline(port)
+        p.expect(['Enter your irods user name:'])
+        username = raw_input("iRODS username:")
+        p.sendline(username)
+        p.expect(['Enter your irods zone:'])
+        zone = raw_input("iRODS zone:")
+        p.sendline(zone)
+        p.expect(['Those values will.*'])
+    #passes password to iRODS
+    password = getpass.getpass('iRODS Password: ')
+    p.sendline(password)
+    #checks for errors 
+    i=p.expect(['CAT_INVALID_AUTHENTICATION', 'USER_RODS_HOSTNAME_ERR', 'USER_SOCK_CONNECT_ERR', 'SYS_AGENT_INIT_ERR', pexpect.EOF])
+    if i==0:
+        print "Your password was incorrect."
+        again = raw_input("Would you like to try again?(Yes or No)")
+        if (again in ("Yes", "Y", "yes", "y")):
+            callIinit()
+        elif (again in ("No", "N", "no", "n")):
+            return False
+        else:
+            print ("Please answer Yes or No")
+    elif i==1:
+        print "Your hostname was incorrect."
+        again = raw_input("Would you like to try again?(Yes or No)")
+        if (again in ("Yes", "Y", "yes", "y")):
+            callIinit()
+        elif (again in ("No", "N", "no", "n")):
+            return False
+        else:
+            print ("Please answer Yes or No")
+    elif i==2:
+        print "Your port number was incorrect or the server is down."
+        again = raw_input("Would you like to try again?(Yes or No)")
+        if (again in ("Yes", "Y", "yes", "y")):
+            callIinit()
+        elif (again in ("No", "N", "no", "n")):
+            return False
+        else:
+            print ("Please answer Yes or No")
+    elif i==3:
+        print "Your username, zone, or password was incorrect."
+        again = raw_input("Would you like to try again?(Yes or No)")
+        if (again in ("Yes", "Y", "yes", "y")):
+            callIinit()
+        elif (again in ("No", "N", "no", "n")):
+            return False
+        else:
+            print ("Please answer Yes or No")
+    else:
+        print "iRODS login was successful"
+        return True
+
