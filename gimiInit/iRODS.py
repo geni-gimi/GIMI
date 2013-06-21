@@ -40,7 +40,8 @@ class iRODS:
 
         # create directories and include initial XML files
         self.makeExpDirectory()
-        print '\niRODS intial directory setup was successful\n'
+        self.pushOMFs()
+        print 'iRODS intial collection setup was successful\n'
 
 
     # Builds Porject & Experiment XML files and writes them to files
@@ -135,22 +136,17 @@ class iRODS:
 
     # Puts intial OMF scripts into iRODS
     def pushOMFs(self):
-        self.makeArtAndStepFiles('design_experiment', None, None, 'orchestrate_script', 'interpretation_read_me')
         subprocess.check_output(['icd'])
         # check if experimentTemplates directory already exists
         try:
-            subprocess.check_output(['icd', 'experimentTemplates '])
+            print 'turtle'
+            subprocess.check_output(['icd', 'experimentTemplates'])
             print "OMF template scripts already exist in iRODS\n"
             subprocess.check_output(['icd'])
         # if experimentTemplates directory does not exist
         except:
-            #get OMF scripts from gimiadmin
-            subprocess.check_output(['iget', '/geniRenci/gimiadmin/experimentTemplates', '-r'])
-            #add OMF scripts to directory
-            subprocess.check_output(['iput', 'experimentTemplates', '-r'])
-            #add xml files to directory
-            subprocess.check_output(['iput', 'step.xml'])
-            subprocess.check_output(['iput', 'artifact.xml'])
+            #copy OMF scripts from gimiadmin to user directory
+            subprocess.check_output(['icp', '-r', '/geniRenci/home/gimiadmin/experimentTemplates', 'experimentTemplates'])
             subprocess.check_output(['icd'])
             print "OMF template scripts have been pushed to iRODS\n"
 
@@ -162,6 +158,7 @@ class iRODS:
         ticket = subprocess.check_output(['iticket', 'create', 'write', self.exp_id])
         ticket = ticket.replace("ticket:","")
         ticket = ticket.replace("\n","")
+        print "Ticket for new directory: " + ticket
         # Restricts users
         if users is None:
             users=[]
@@ -170,14 +167,13 @@ class iRODS:
         # Sets expiration time
         if expire_time != 0:
             self.extendTicket(ticket, expire_time)
-        print "Ticket for new directory: " + ticket
         return ticket 
 
     # Postpones the time at which the iticket expires.
     # expire_time must be UNIX timestamp
     def extendTicket(self, ticket, expire_time):
         subprocess.check_output(['iticket', 'mod', ticket, 'expire', expire_time])
-        print "Expiration date is now set to: " + expire_time
+        print "Ticket expiration date is set to: " + expire_time
         return ticket
 
     # Adds user to list of users with access to ticket

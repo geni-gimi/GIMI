@@ -122,8 +122,9 @@ os.system("omni.py listresources " + slicename + " -a pg-utah -o --outputfile=" 
 # This creates an example iRODS object & creates the XML files & makes a ticket
 if (initialized==True):
     newRods = iRODS.iRODS(workdirectory, proj_authority, 'proj_name', projectID, 'PI', 'proj_individual_authority', 'proj_individual_user', 'proj_date_time_type', 'proj_start', 'exp_authority', expName, expId, 'experimenter', exp_org, username, 'iso8601', expTime)
-    # Make an initial ticket
-    myTicket=newRods.makeTicket(expire_time='1379654800')
+    # Make an initial ticket with slice expiraion time 
+    sliceExpTime=gimi_util.getExpire(slicename)
+    myTicket=newRods.makeTicket(expire_time=sliceExpTime)
     while True:
         pushManifestOption = raw_input("Do you want to push manifest to iRODS? (Yes or No) \n")
         if (pushManifestOption in ("Yes", "Y", "yes", "y")):

@@ -18,6 +18,7 @@
 import time
 import pexpect
 import getpass
+import subprocess
 
 printtoscreen=1
 dontprinttoscreen=0
@@ -174,3 +175,18 @@ def callIinit():
         print "iRODS login was successful"
         return True
 
+#get expiration date & time for specified slice  
+def getExpire(slicename):
+    p= subprocess.Popen(['omni.py', 'print_slice_expiration', slicename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    slice_expirationOutput, slice_expirationErrors = p.communicate()
+    output=slice_expirationErrors
+    indexOfExpire=output.find('expires on')
+    if indexOfExpire!=-1:
+        expireDate=output[indexOfExpire+11:indexOfExpire+21]
+        expireTime=output[indexOfExpire+22:indexOfExpire+30]
+    else:
+        indexOfExpire=output.find('expires within 1 day on')
+        expireDate=output[indexOfExpire+24:indexOfExpire+34]
+        expireTime=output[indexOfExpire+35:indexOfExpire+44]
+    expiration=expireDate+'.'+expireTime
+    return expiration
