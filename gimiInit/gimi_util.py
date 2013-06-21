@@ -46,15 +46,15 @@ def get_user(theOutput):
     indexOfUser=theOutput.find("User ")
     userInfo=theOutput[indexOfUser:]
     gettingUser=userInfo.split('\'')
-    user=gettingUser[1]          ## user is your username
+    user=gettingUser[1]           ## user is your username
     return user
 
 def listmyslices_output_parse(theOutput):
     moreSlices=True
     rev_slices=[]
     projects = []
+    authorities = []
     while(moreSlices==True):
-
         indexOfURN=theOutput.find('urn:')
         theOutput=theOutput[indexOfURN:]
         indexOfLineEnd=theOutput[2:].find('urn:')
@@ -64,15 +64,18 @@ def listmyslices_output_parse(theOutput):
         urnInfo=theOutput[:indexOfLineEnd]
 
         info=urnInfo.split(":")
+        auth=info[2].split('+')
+        proj_authority=auth[1]
         x=info[3].split('+')
         
-        projectID=x[0]             ## project is the name of your project
-        slicename=x[2]           ## slicename is the name of your slice
+        projectID=x[0]            ## project is the name of your project
+        slicename=x[2]            ## slicename is the name of your slice
         rev_slices.append(slicename)
         projects.append(projectID)
+        authorities.append(proj_authority)
         theOutput=theOutput[indexOfLineEnd-1:]
     slices = rev_slices[::-1]
-    return projects, slices
+    return authorities, projects, slices
 
 def getRspecs(output):
     theOutput=output

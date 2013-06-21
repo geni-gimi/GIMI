@@ -54,7 +54,6 @@ exp_org= raw_input ("Your organization: \n")
 print("Initializing iRODS")
 
 initialized=gimi_util.callIinit()
-print initialized
 
 #irodsenv = subprocess.check_output(['ienv'])
 #print irodsenv
@@ -84,7 +83,7 @@ username = gimi_util.get_user(listmyslicesErrors)
 print ("Your user name is " + username + " \n")
 
 # print listmyslicesErrors
-(returned_projectID, returned_slicename) = gimi_util.listmyslices_output_parse(listmyslicesErrors) 
+(returned_projectAuthority, returned_projectID, returned_slicename) = gimi_util.listmyslices_output_parse(listmyslicesErrors) 
 
 slicename = '\n'.join(str(x) for x in returned_slicename)
 
@@ -98,6 +97,7 @@ while True:
 
 slice_index = returned_slicename.index(slicename)    
 projectID = ''.join(str(returned_projectID[slice_index]))# for x in returned_projectID)
+proj_authority = ''.join(str(returned_projectAuthority[slice_index]))
 print ("Your slice name is: " + slicename)
 
 print ("Your project ID is: \n" + projectID)
@@ -121,7 +121,7 @@ os.system("omni.py listresources " + slicename + " -a pg-utah -o --outputfile=" 
        
 # This creates an example iRODS object & creates the XML files & makes a ticket
 if (initialized==True):
-    newRods = iRODS.iRODS(workdirectory, 'proj_authority', 'proj_name', projectID, 'PI', 'proj_individual_authority', 'proj_individual_user', 'proj_date_time_type', 'proj_start', 'exp_authority', expName, expId, 'experimenter', exp_org, username, 'iso8601', expTime)
+    newRods = iRODS.iRODS(workdirectory, proj_authority, 'proj_name', projectID, 'PI', 'proj_individual_authority', 'proj_individual_user', 'proj_date_time_type', 'proj_start', 'exp_authority', expName, expId, 'experimenter', exp_org, username, 'iso8601', expTime)
     # Make an initial ticket
     myTicket=newRods.makeTicket(expire_time='1379654800')
     while True:
