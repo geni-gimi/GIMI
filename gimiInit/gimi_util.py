@@ -54,7 +54,7 @@ def get_user(theOutput):
 
 def listmyslices_output_parse(theOutput):
     moreSlices=True
-    rev_slices=[]
+    slices=[]
     projects = []
     authorities = []
     while(moreSlices==True):
@@ -73,11 +73,11 @@ def listmyslices_output_parse(theOutput):
         
         projectID=x[0]            ## project is the name of your project
         slicename=x[2]            ## slicename is the name of your slice
-        rev_slices.append(slicename)
+        slices.append(slicename)
         projects.append(projectID)
         authorities.append(proj_authority)
         theOutput=theOutput[indexOfLineEnd-1:]
-    slices = rev_slices[::-1]
+#    slices = rev_slices[::-1]
     return authorities, projects, slices
 
 def getRspecs(output):

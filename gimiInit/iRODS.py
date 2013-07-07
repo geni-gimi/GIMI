@@ -139,7 +139,6 @@ class iRODS:
         subprocess.check_output(['icd'])
         # check if experimentTemplates directory already exists
         try:
-            print 'turtle'
             subprocess.check_output(['icd', 'experimentTemplates'])
             print "OMF template scripts already exist in iRODS\n"
             subprocess.check_output(['icd'])

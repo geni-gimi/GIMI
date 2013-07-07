@@ -37,6 +37,7 @@ if (os.path.exists(workdirectory) == False):
         createPathOption = raw_input("Path doesn't exist, do you want me to create directory for you? (Yes or No) \n")
         if (createPathOption in ("Yes", "Y", "yes", "y")):
             os.makedirs(workdirectory)
+            os.makedirs(workdirectory+"/manifests")
             break
         elif (createPathOption in ("No", "N", "no", "n")):
             print ("Please try again after creating the directory")
