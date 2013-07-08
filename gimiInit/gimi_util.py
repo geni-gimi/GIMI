@@ -19,6 +19,8 @@ import time
 import pexpect
 import getpass
 import subprocess
+import omni
+import os
 
 printtoscreen=1
 dontprinttoscreen=0
@@ -52,7 +54,7 @@ def get_user(theOutput):
 
 def listmyslices_output_parse(theOutput):
     moreSlices=True
-    rev_slices=[]
+    slices=[]
     projects = []
     authorities = []
     while(moreSlices==True):
@@ -71,11 +73,11 @@ def listmyslices_output_parse(theOutput):
         
         projectID=x[0]            ## project is the name of your project
         slicename=x[2]            ## slicename is the name of your slice
-        rev_slices.append(slicename)
+        slices.append(slicename)
         projects.append(projectID)
         authorities.append(proj_authority)
         theOutput=theOutput[indexOfLineEnd-1:]
-    slices = rev_slices[::-1]
+#    slices = rev_slices[::-1]
     return authorities, projects, slices
 
 def getRspecs(output):
@@ -114,7 +116,7 @@ def callIinit():
     if i==2:
         print 'ERROR!'
         print 'iRODS could not login. Here is what iRODS said:'
-        print child.before, child.after
+        print p.before, p.after
         return False
     #gives user setup information to iRODS
     if i==1:
@@ -190,3 +192,17 @@ def getExpire(slicename):
         expireTime=output[indexOfExpire+35:indexOfExpire+44]
     expiration=expireDate+'.'+expireTime
     return expiration
+
+def getRspec(slicename, manifest_workdirectory, manifestName):
+    print "Checking resources from aggregates..."
+    aggregates = ['pg-utah','pg-bbn','pg-uky','ku','eg-bbn','eg-renci','eg-sm','ig-utah','ig-gpo']
+    for am in aggregates:
+        bigString = "--outputfile=" + manifest_workdirectory + am + "-" + manifestName
+        checkOutput = subprocess.Popen(['omni.py', 'listresources', slicename, '-a', am, '-o'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        checkOut, checkErrors = checkOutput.communicate()
+        if "No resource listing returned" in checkErrors:
+            break
+        else:
+            p= subprocess.Popen(['omni.py', 'listresources', slicename, '-a', am, '-o', bigString], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output, errors = p.communicate()
+            print ("Found resource in aggregate: " + am + ", manifest stored as " + manifest_workdirectory + manifestName)

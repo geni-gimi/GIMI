@@ -37,6 +37,7 @@ if (os.path.exists(workdirectory) == False):
         createPathOption = raw_input("Path doesn't exist, do you want me to create directory for you? (Yes or No) \n")
         if (createPathOption in ("Yes", "Y", "yes", "y")):
             os.makedirs(workdirectory)
+            os.makedirs(workdirectory+"/manifests")
             break
         elif (createPathOption in ("No", "N", "no", "n")):
             print ("Please try again after creating the directory")
@@ -116,9 +117,8 @@ print ("retrieving the manifest rspec...")
 manifestName="manifest-"+ expId + ".rspec"
 manifest_workdirectory = workdirectory + "/manifests/"
 
-os.system("omni.py listresources " + slicename + " -a pg-utah -o --outputfile=" + manifest_workdirectory + manifestName)
- 
-       
+gimi_util.getRspec(slicename, manifest_workdirectory, manifestName)
+
 # This creates an example iRODS object & creates the XML files & makes a ticket
 if (initialized==True):
     newRods = iRODS.iRODS(workdirectory, proj_authority, 'proj_name', projectID, 'PI', 'proj_individual_authority', 'proj_individual_user', 'proj_date_time_type', 'proj_start', 'exp_authority', expName, expId, 'experimenter', exp_org, username, 'iso8601', expTime)
@@ -136,7 +136,7 @@ if (initialized==True):
         else:
             print ("Please answer Yes or No")
 else:
-   print "iRODS was never initialized. No data has been pushed to iRODS."
+    print "iRODS was never initialized. No data has been pushed to iRODS."
 
 
 restInt = gimiREST.REST("emmy9.casa.umass.edu", "8013", workdirectory, expId)
