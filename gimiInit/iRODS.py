@@ -70,7 +70,7 @@ class iRODS:
 
     # Adds a new artifact with descriptor files to this experiment directory
     def addArtifact(self, artifact, artifactLocation, prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me, directory_name=None):
-        self.makeArtAndStepFiles(prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me)
+        self.makeArtAndStepFiles(artifactLocation, prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me)
         self.makeArtifactDirectory(artifact,artifactLocation, directory_name)
 
     # Adds a new artifact to a specified arifact directory
@@ -82,13 +82,13 @@ class iRODS:
         
 
     # Builds Artifact & Step XML files and writes them to files
-    def makeArtAndStepFiles(self,prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me):
+    def makeArtAndStepFiles(self, artifactLocation, prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me):
         # makes step XML file
         newStep = simpleStep.Step(prime_function, resource_type, resource_id)
-        newStep.makeXML(self.work_directory)
+        newStep.makeXML(artifactLocation)
         # makes artifact XML file
         newArtifact = simpleArtifact.Artifact(art_type_prime, interpretation_read_me)
-        newArtifact.makeXML(self.work_directory)
+        newArtifact.makeXML(artifactLocation)
 
     # Creates all directories within iRODS for this experiment and put XML files into iRODS
     def makeArtifactDirectory(self, artifact, artifactLocation, directory_name):
@@ -111,8 +111,8 @@ class iRODS:
         subprocess.check_output(['icd', directory_name_run])
         #add artifact & xml files to directory
         subprocess.check_output(['iput', artifactLocation+'/'+artifact, '-r'])
-        subprocess.check_output(['iput', self.work_directory+'/step.xml'])
-        subprocess.check_output(['iput', self.work_directory+'/artifact.xml'])
+        subprocess.check_output(['iput', artifactLocation+'/step.xml'])
+        subprocess.check_output(['iput', artifactLocation+'/artifact.xml'])
         subprocess.check_output(['icd'])
 
     
