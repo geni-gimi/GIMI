@@ -198,7 +198,6 @@ def getRspec(slicename, manifest_workdirectory, manifestName):
     aggregates = ['pg-utah','pg-bbn','pg-uky','pg-ky','eg-bbn','eg-renci','eg-sm','ig-utah','ig-gpo']
     for am in aggregates:
         bigString = "--outputfile=" + manifest_workdirectory + "/" + am + "-" + manifestName
-        print bigString
         checkOutput = subprocess.Popen(['omni.py', 'listresources', slicename, '-a', am], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         checkOut, checkErrors = checkOutput.communicate()
         if "No resource listing returned" in checkErrors:
