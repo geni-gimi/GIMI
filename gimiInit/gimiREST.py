@@ -47,7 +47,7 @@ class REST:
         jsonf.write(data)
         jsonf.close()
         
-        os.system('curl -X POST -H "Content-Type: application/json" --data-binary @'+ json_filename +' ' + self.restURL + ':' + str(self.restPort) + '/projects/' + self.proj_name + '/experiments')
+        os.system('curl -X POST -H "Content-Type: application/json" --data-binary @'+ json_filename +' ' + self.restURL + ':' + str(self.restPort) + '/projects' + self.proj_name + '/experiments')
    
     def postSlice(self):
         data = {'name': self.slice_name,'manifest': self.manifest}
@@ -60,7 +60,7 @@ class REST:
         jsonf.write(data)
         jsonf.close()
         
-        os.system('curl -X POST -H "Content-Type: application/json" --data-binary @'+ json_filename +' ' + self.restURL + ':' + str(self.restPort) + '/projects/' + self.proj_name + '/experiments/' + self.exp_name + 'slices')
+        os.system('curl -X POST -H "Content-Type: application/json" --data-binary @'+ json_filename +' ' + self.restURL + ':' + str(self.restPort) + '/projects' + self.proj_name + '/experiments' + self.exp_name + '/slices')
 
    def postUser(self):
         data = {'name': self.user_name}
@@ -73,5 +73,5 @@ class REST:
         jsonf.write(data)
         jsonf.close()
 
-        os.system('curl -X POST -H "Content-Type: application/json" --data-binary @'+ json_filename +' ' + self.restURL + ':' + str(self.restPort) + '/projects/' + self.proj_name + '/users')
+        os.system('curl -X POST -H "Content-Type: application/json" --data-binary @'+ json_filename +' ' + self.restURL + ':' + str(self.restPort) + '/projects' + self.proj_name + '/users')
 
