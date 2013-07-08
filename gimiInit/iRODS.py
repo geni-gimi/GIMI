@@ -120,6 +120,7 @@ class iRODS:
     def pushManifest(self, manifestLocation, slicename):
         directory_name='manifest_rspec'
         os.chdir(manifestLocation)
+        manifestLocation=manifestLocation[:-1]
         #saves contents of manifestLocation directory folder as string
         files=subprocess.check_output(['ls'])
         #saves file names from manifestLocation into array
