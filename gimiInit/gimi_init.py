@@ -37,7 +37,7 @@ if (os.path.exists(workdirectory) == False):
         createPathOption = raw_input("Path doesn't exist, do you want me to create directory for you? (Yes or No) \n")
         if (createPathOption in ("Yes", "Y", "yes", "y")):
             os.makedirs(workdirectory)
-            os.makedirs(workdirectory+"/manifests")
+            
             break
         elif (createPathOption in ("No", "N", "no", "n")):
             print ("Please try again after creating the directory")
@@ -115,7 +115,10 @@ print ("derived experiment ID: " + expId)
 print ("retrieving the manifest rspec...")
 
 manifestName="manifest-"+ expId + ".rspec"
-manifest_workdirectory = workdirectory + "/manifests/"
+manifest_workdirectory = workdirectory + "/manifests-" + expTime
+print manifest_workdirectory
+
+os.makedirs(manifest_workdirectory)
 
 gimi_util.getRspec(slicename, manifest_workdirectory, manifestName)
 
@@ -139,4 +142,4 @@ else:
     print "iRODS was never initialized. No data has been pushed to iRODS."
 
 
-restInt = gimiREST.REST("emmy9.casa.umass.edu", "8013", workdirectory, expId)
+restInt = gimiREST.REST("emmy9.casa.umass.edu", "8033", workdirectory, expId)
