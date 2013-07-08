@@ -139,7 +139,6 @@ class iRODS:
         subprocess.check_output(['icd'])
         # check if experimentTemplates directory already exists
         try:
-            print 'turtle'
             subprocess.check_output(['icd', 'experimentTemplates'])
             print "OMF template scripts already exist in iRODS\n"
             subprocess.check_output(['icd'])
@@ -188,10 +187,10 @@ class iRODS:
 #### TEST CODE ####
 
 # This creates an example iRODS object & creates the XML files
-#newExp = iRODS('/home/koneil/iRODSstuff/tmp', "Project Authority", "My Project", 'proj_id', 'PI', 'Her authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z', 'exp_authority', 'myProject2', 'myExperiment', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
+#newExp = iRODS('/home/koneil/iRODSstuff/tmp', "Project Authority", "My Project", 'proj_id', 'PI', 'Her authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z', 'exp_authority', 'myProject2', 'testExperiment', 'experimenter', 'individual_authority', 'geni_user', 'iso8601', '2013-06-05T09:30:01Z')
 #To Push manifest
 #newExp.pushManifest('/home/koneil/iRODSstuff/manifests','my_slice')
-#newExp.pushOMFs()
+
 
 #make initial tickets
 #myTicket=newExp.makeTicket(['koneil2','koneil3'])
