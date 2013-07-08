@@ -206,3 +206,21 @@ def getRspec(slicename, manifest_workdirectory, manifestName):
             p= subprocess.Popen(['omni.py', 'listresources', slicename, '-a', am, '-o', bigString], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output, errors = p.communicate()
             print ("Found resource in aggregate: " + am + ", manifest stored as " + manifest_workdirectory + "/" + am + "-" + manifestName)
+
+
+# Creates tickets for the experiment directory taking in user restrictions & an expiration time
+def makeTicket(exp_id, users=None, expire_time=0):
+    ticket = subprocess.check_output(['iticket', 'create', 'write', exp_id])
+    ticket = ticket.replace("ticket:","")
+    ticket = ticket.replace("\n","")
+    print "New ticket for directory: " + ticket
+    # Restricts users
+    if users is None:
+        users=[]
+    for x in users:
+        subprocess.check_output(['iticket', 'mod', ticket, 'add', 'user', x])
+    # Sets expiration time
+    if expire_time != 0:
+        subprocess.check_output(['iticket', 'mod', ticket, 'expire', expire_time])
+    return ticket 
+
