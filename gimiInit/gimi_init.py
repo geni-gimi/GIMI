@@ -21,6 +21,7 @@ import time
 import subprocess
 import iRODS
 import gimiREST
+import gimiRest_GET
 import gimi_util
 import omni
 #import urllib
@@ -34,11 +35,26 @@ while True:
     if (newExpOption in ("Yes", "Y", "yes", "y")):
         break
     elif (newExpOption in ("No", "N", "no", "n")):
-        expId = raw_input("Updating existing experiment... Please enter your experiment ID: \n")
+        workdirectory = raw_input("Enter your preferred experiment path (please use absolute path, e.g., /home/geni/your/dir): \n")        
+        if (os.path.exists(workdirectory) == False):
+            while True:
+                createPathOption = raw_input("Path doesn't exist, do you want me to create directory for you? (Yes or No) \n")
+                if (createPathOption in ("Yes", "Y", "yes", "y")):
+                    os.makedirs(workdirectory)
+                    break
+                elif (createPathOption in ("No", "N", "no", "n")):
+                    print ("Please try again after creating the directory")
+                    sys.exit(1)
+                else: 
+                    print ("Please answer Yes or No")
+            
+        print ("Updating existing experiment...")
         p = subprocess.Popen(['omni.py', 'listmyslices'], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-        litmyslicesOutput, listmyslicesErrors = p.communicate()
+        listmyslicesOutput, listmyslicesErrors = p.communicate()
         # get username
         username = gimi_util.get_user(listmyslicesErrors)
+        print username
+        
         (returned_projectAuthority, returned_projectID, returned_slicename) = gimi_util.listmyslices_output_parse(listmyslicesErrors) 
 
         slicenames = '\n'.join(str(x) for x in returned_slicename)
@@ -50,12 +66,41 @@ while True:
                 break
             else:
                 slicename = raw_input("Please only enter the slice names listed above: \n")
-
+        
+        projectName = raw_input("Please enter your project name: \n")
+        expList = gimiRest_GET.getExperiment("http://emmy9.casa.umass.edu", "8002", projectName)
+        print("Your existing experiments: \n")
+        print "\n".join(expList)
+        expId = raw_input("Please enter the experiment ID you are updating: \n")
+        #projectName = gimiRest_GET.getProject("http://emmy9.casa.umass.edu", "8002")
+        
         initialized = gimi_util.callIinit()
-            
+        
         sliceExpTime=gimi_util.getExpire(slicename)
         myTicket=gimi_util.makeTicket(expId, expire_time=sliceExpTime)
-        print ("You got your new iticket: " + myTicket)
+        
+        manifestName="manifest-"+ expId + ".rspec"
+        expTime = str(time.strftime("%Y-%m-%dT%H:%M:%S",time.localtime(time.time())))
+        manifest_workdirectory = workdirectory + "/manifests-" + expTime
+        os.makedirs(manifest_workdirectory)
+        gimi_util.getRspec(slicename, manifest_workdirectory, manifestName)
+        
+        if (initialized==True):
+            itkt_create_time = str(time.strftime("%Y-%m-%dT%H:%M:%S",time.localtime(time.time())))
+            sliceExpTime=gimi_util.getExpire(slicename)
+            myTicket=gimi_util.makeTicket(expId, expire_time=sliceExpTime)
+            while True:
+                pushManifestOption = raw_input("Do you want to push the new manifest to iRODS? (Yes or No) \n")
+                if (pushManifestOption in ("Yes", "Y", "yes", "y")):
+                    # Push to iRODS
+                    iRODS.iRODS.pushManifest(manifest_workdirectory, slicename)
+                    break
+                elif (pushManifestOption in ("No", "N", "no", "n")):
+                    break
+                else:
+                    print ("Please answer Yes or No")
+        else:
+            print "iRODS was never initialized. No data has been pushed to iRODS."
         sys.exit(1)
     else: 
         print ("Please answer Yes or No")
@@ -129,7 +174,6 @@ print ("Retrieving the manifest rspec...")
 
 manifestName="manifest-"+ expId + ".rspec"
 manifest_workdirectory = workdirectory + "/manifests-" + expTime
-print manifest_workdirectory
 
 os.makedirs(manifest_workdirectory)
 
@@ -161,5 +205,5 @@ manifest = manifestName + ".xml"
 
 irodsHome = gimi_util.ienvParse()
 
-irods_path = irodsHome + manifest_workdirectory
-restInt = gimiREST.REST("emmy9.casa.umass.edu", "8002", workdirectory, username, projectID, expId, myTicket, irods_path, itkt_create_time, sliceExpTime, slicename, manifest)
+irods_path = irodsHome + "/manifests-" + expTime
+restInt = gimiREST.REST("http://emmy9.casa.umass.edu", "8002", workdirectory, username, projectID, expId, myTicket, irods_path, itkt_create_time, sliceExpTime, slicename, manifest)
