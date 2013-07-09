@@ -126,6 +126,9 @@ class iRODS:
         #saves file names from manifestLocation into array
         manifests=files.split('\n')
         subprocess.check_output(['icd'])
+        if manifests==['']:
+            print "WARNING: No manifest rspecs were found."
+            return
         #adds first manifest rspec and creates descriptor files
         self.addArtifact(manifests[0], manifestLocation, 'obtain_resources', 'slice', slicename, 'GENI_AM_API_sliver_manifest_rspec', 'interpretation_read_me', directory_name)
         manifests=manifests[1:-1]

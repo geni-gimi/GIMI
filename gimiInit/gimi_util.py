@@ -195,7 +195,7 @@ def getExpire(slicename):
 
 def getRspec(slicename, manifest_workdirectory, manifestName):
     print "Checking resources from aggregates... (this might take some time)"
-    aggregates = ['pg-utah','pg-bbn','pg-uky','pg-ky','eg-bbn','eg-renci','eg-sm','ig-utah','ig-gpo']
+    aggregates = ['https://pgeni.gpolab.bbn.com:12369/protogeni/xmlrpc/am/2.0', 'https://www.emulab.net:12369/protogeni/xmlrpc/am/2.0', 'https://www.uky.emulab.net:12369/protogeni/xmlrpc/am/2.0', 'https://bbn-hn.exogeni.net:11443/orca/xmlrpc', 'https://rci-hn.exogeni.net:11443/orca/xmlrpc', 'https://geni.renci.org:11443/orca/xmlrpc', 'https://boss.utah.geniracks.net:12369/protogeni/xmlrpc/am/2.0', 'https://boss.instageni.gpolab.bbn.com:12369/protogeni/xmlrpc/am/2.0', 'https://boss.lan.sdn.uky.edu:12369/protogeni/xmlrpc/am/2.0', 'https://geni.kettering.edu:12369/protogeni/xmlrpc/am', 'https://instageni.northwestern.edu:12369/protogeni/xmlrpc/am']
     for am in aggregates:
         bigString = "--outputfile=" + manifest_workdirectory + "/" + am + "-" + manifestName
 
