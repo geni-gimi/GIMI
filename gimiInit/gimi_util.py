@@ -194,10 +194,11 @@ def getExpire(slicename):
     return expiration
 
 def getRspec(slicename, manifest_workdirectory, manifestName):
-    print "Checking resources from aggregates..."
+    print "Checking resources from aggregates... (this might take some time)"
     aggregates = ['pg-utah','pg-bbn','pg-uky','pg-ky','eg-bbn','eg-renci','eg-sm','ig-utah','ig-gpo']
     for am in aggregates:
         bigString = "--outputfile=" + manifest_workdirectory + "/" + am + "-" + manifestName
+
         checkOutput = subprocess.Popen(['omni.py', 'listresources', slicename, '-a', am], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         checkOut, checkErrors = checkOutput.communicate()
         if "No resource listing returned" in checkErrors:
@@ -206,7 +207,6 @@ def getRspec(slicename, manifest_workdirectory, manifestName):
             p= subprocess.Popen(['omni.py', 'listresources', slicename, '-a', am, '-o', bigString], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output, errors = p.communicate()
             print ("Found resource in aggregate: " + am + ", manifest stored as " + manifest_workdirectory + "/" + am + "-" + manifestName)
-
 
 # Creates tickets for the experiment directory taking in user restrictions & an expiration time
 def makeTicket(exp_id, users=None, expire_time=0):
@@ -224,3 +224,16 @@ def makeTicket(exp_id, users=None, expire_time=0):
         subprocess.check_output(['iticket', 'mod', ticket, 'expire', expire_time])
     return ticket 
 
+#Check iRODS environment settings
+def ienvParse():
+    ienvOut = subprocess.check_output(['ienv'])
+    for item in ienvOut.split("\n"):
+        if "irodsHome=" in item:
+            ienvOutLine = item.strip()
+
+    indexOfIrodsHome = ienvOutLine.find("irodsHome")
+    irodsHomeInfo = ienvOutLine[indexOfIrodsHome:]
+    gettingIrodsHome = irodsHomeInfo.split('=')
+    irodsHome = gettingIrodsHome[1]
+    
+    return irodsHome
