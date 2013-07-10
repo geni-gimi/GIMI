@@ -79,6 +79,7 @@ class iRODS:
         except:
             #copy OMF scripts from gimiadmin to user directory
             subprocess.check_output(['icp', '-r', '/geniRenci/home/gimiadmin/experimentTemplates', 'experimentTemplates'])
+            subprocess.check_output(['ichmod', '-r', 'write', 'public', 'experimentTemplates'])
             subprocess.check_output(['icd'])
             print "OMF template scripts have been pushed to iRODS\n"
 
