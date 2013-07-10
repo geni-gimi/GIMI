@@ -76,24 +76,24 @@ while True:
         
         initialized = gimi_util.callIinit()
         
-        sliceExpTime=gimi_util.getExpire(slicename)
+        sliceExpTime=gimi_util.getExpire(slicename, projectName)
         myTicket=gimi_util.makeTicket(expId, expire_time=sliceExpTime)
         
         manifestName="manifest-"+ expId + ".rspec"
         expTime = str(time.strftime("%Y-%m-%dT%H:%M:%S",time.localtime(time.time())))
         manifest_workdirectory = workdirectory + "/manifests-" + expTime
         os.makedirs(manifest_workdirectory)
-        gimi_util.getRspec(slicename, manifest_workdirectory, manifestName)
+        gimi_util.getRspec(slicename, projectName, manifest_workdirectory, manifestName)
         
         if (initialized==True):
             itkt_create_time = str(time.strftime("%Y-%m-%dT%H:%M:%S",time.localtime(time.time())))
-            sliceExpTime=gimi_util.getExpire(slicename)
+            sliceExpTime=gimi_util.getExpire(slicename, projectName)
             myTicket=gimi_util.makeTicket(expId, expire_time=sliceExpTime)
             while True:
                 pushManifestOption = raw_input("Do you want to push the new manifest to iRODS? (Yes or No) \n")
                 if (pushManifestOption in ("Yes", "Y", "yes", "y")):
                     # Push to iRODS
-                    iRODS.iRODS.pushManifest(manifest_workdirectory, slicename)
+                    gimi_util.pushManifest(expId, manifest_workdirectory, slicename)
                     break
                 elif (pushManifestOption in ("No", "N", "no", "n")):
                     break
@@ -177,20 +177,20 @@ manifest_workdirectory = workdirectory + "/manifests-" + expTime
 
 os.makedirs(manifest_workdirectory)
 
-gimi_util.getRspec(slicename, manifest_workdirectory, manifestName)
+gimi_util.getRspec(slicename, projectID, manifest_workdirectory, manifestName)
 
 # This creates an example iRODS object & creates the XML files & makes a ticket
 if (initialized==True):
     newRods = iRODS.iRODS(workdirectory, proj_authority, 'proj_name', projectID, 'PI', 'proj_individual_authority', 'proj_individual_user', 'proj_date_time_type', 'proj_start', 'exp_authority', expName, expId, 'experimenter', exp_org, username, 'iso8601', expTime)
     # Make an initial ticket with slice expiraion time 
-    sliceExpTime = gimi_util.getExpire(slicename)
+    sliceExpTime = gimi_util.getExpire(slicename, projectID)
     itkt_create_time = str(time.strftime("%Y-%m-%dT%H:%M:%S",time.localtime(time.time())))
-    myTicket=newRods.makeTicket(expire_time=sliceExpTime)
+    myTicket=gimi_util.makeTicket(expId, expire_time=sliceExpTime)
     while True:
         pushManifestOption = raw_input("Do you want to push manifest to iRODS? (Yes or No) \n")
         if (pushManifestOption in ("Yes", "Y", "yes", "y")):
             # Push to iRODS
-            newRods.pushManifest(manifest_workdirectory, slicename)
+            gimi_util.pushManifest(expId, manifest_workdirectory, slicename)
             break
         elif (pushManifestOption in ("No", "N", "no", "n")):
             break

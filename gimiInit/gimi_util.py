@@ -21,6 +21,8 @@ import getpass
 import subprocess
 import omni
 import os
+import simpleStep
+import simpleArtifact
 
 printtoscreen=1
 dontprinttoscreen=0
@@ -178,8 +180,8 @@ def callIinit():
         return True
 
 #get expiration date & time for specified slice  
-def getExpire(slicename):
-    p= subprocess.Popen(['omni.py', 'print_slice_expiration', slicename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+def getExpire(slicename, project):
+    p= subprocess.Popen(['omni.py', 'print_slice_expiration', slicename, '-r', project], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     slice_expirationOutput, slice_expirationErrors = p.communicate()
     output=slice_expirationErrors
     indexOfExpire=output.find('expires on')
@@ -193,36 +195,21 @@ def getExpire(slicename):
     expiration=expireDate+'.'+expireTime
     return expiration
 
-def getRspec(slicename, manifest_workdirectory, manifestName):
+def getRspec(slicename, project, manifest_workdirectory, manifestName):
     print "Checking resources from aggregates... (this might take some time)"
     aggregates = ['https://pgeni.gpolab.bbn.com:12369/protogeni/xmlrpc/am/2.0', 'https://www.emulab.net:12369/protogeni/xmlrpc/am/2.0', 'https://www.uky.emulab.net:12369/protogeni/xmlrpc/am/2.0', 'https://bbn-hn.exogeni.net:11443/orca/xmlrpc', 'https://rci-hn.exogeni.net:11443/orca/xmlrpc', 'https://geni.renci.org:11443/orca/xmlrpc', 'https://boss.utah.geniracks.net:12369/protogeni/xmlrpc/am/2.0', 'https://boss.instageni.gpolab.bbn.com:12369/protogeni/xmlrpc/am/2.0', 'https://boss.lan.sdn.uky.edu:12369/protogeni/xmlrpc/am/2.0', 'https://geni.kettering.edu:12369/protogeni/xmlrpc/am', 'https://instageni.northwestern.edu:12369/protogeni/xmlrpc/am']
     for am in aggregates:
         bigString = "--outputfile=" + manifest_workdirectory + "/" + am + "-" + manifestName
 
-        checkOutput = subprocess.Popen(['omni.py', 'listresources', slicename, '-a', am], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        checkOutput = subprocess.Popen(['omni.py', 'listresources', slicename, '-r', project, '-a', am], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         checkOut, checkErrors = checkOutput.communicate()
         if "No resource listing returned" in checkErrors:
             continue
         else:
-            p= subprocess.Popen(['omni.py', 'listresources', slicename, '-a', am, '-o', bigString], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p= subprocess.Popen(['omni.py', 'listresources', slicename, '-r', project, '-a', am, '-o', bigString], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output, errors = p.communicate()
             print ("Found resource in aggregate: " + am + ", manifest stored as " + manifest_workdirectory + "/" + am + "-" + manifestName)
 
-# Creates tickets for the experiment directory taking in user restrictions & an expiration time
-def makeTicket(exp_id, users=None, expire_time=0):
-    ticket = subprocess.check_output(['iticket', 'create', 'write', exp_id])
-    ticket = ticket.replace("ticket:","")
-    ticket = ticket.replace("\n","")
-    print "New ticket for directory: " + ticket
-    # Restricts users
-    if users is None:
-        users=[]
-    for x in users:
-        subprocess.check_output(['iticket', 'mod', ticket, 'add', 'user', x])
-    # Sets expiration time
-    if expire_time != 0:
-        subprocess.check_output(['iticket', 'mod', ticket, 'expire', expire_time])
-    return ticket 
 
 #Check iRODS environment settings
 def ienvParse():
@@ -237,3 +224,115 @@ def ienvParse():
     irodsHome = gettingIrodsHome[1]
     
     return irodsHome
+
+
+
+############ iRODS.py stuff ###############
+
+########## ARTIFACTS ##########
+
+# Adds a new artifact with descriptor files to this experiment directory
+def addArtifact(exp_id, artifact, artifactLocation, prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me, directory_name=None):
+    makeArtAndStepFiles(artifactLocation, prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me)
+    makeArtifactDirectory(exp_id, artifact,artifactLocation, directory_name)
+
+# Adds a new artifact to a specified arifact directory
+def addAnotherArtifact(artifact, artifactLocation, directory_name):
+    subprocess.check_output(['icd'])
+    subprocess.check_output(['icd', directory_name])
+    subprocess.check_output(['iput', artifactLocation+'/'+artifact, '-r'])
+    subprocess.check_output(['icd'])
+        
+
+# Builds Artifact & Step XML files and writes them to files
+def makeArtAndStepFiles(artifactLocation, prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me):
+    # makes step XML file
+    newStep = simpleStep.Step(prime_function, resource_type, resource_id)
+    newStep.makeXML(artifactLocation)
+    # makes artifact XML file
+    newArtifact = simpleArtifact.Artifact(art_type_prime, interpretation_read_me)
+    newArtifact.makeXML(artifactLocation)
+
+# Creates all directories within iRODS for this experiment and put XML files into iRODS
+def makeArtifactDirectory(exp_id, artifact, artifactLocation, directory_name):
+    subprocess.check_output(['icd'])
+    subprocess.check_output(['icd', exp_id])
+    # name directory uniquely
+    if directory_name==None:
+        directory_name = artifact
+    run=1
+    directory_name_run = directory_name+'-'+str(run)
+    newDirectory=False
+    while newDirectory==False :
+        try:
+            subprocess.check_output(['imkdir', directory_name_run])
+            newDirectory=True
+            break
+        except:
+            run+=1
+            directory_name_run = directory_name+'-'+str(run)
+    subprocess.check_output(['icd', directory_name_run])
+    #add artifact & xml files to directory
+    subprocess.check_output(['iput', artifactLocation+'/'+artifact, '-r'])
+    subprocess.check_output(['iput', artifactLocation+'/step.xml'])
+    subprocess.check_output(['iput', artifactLocation+'/artifact.xml'])
+    subprocess.check_output(['icd'])
+
+    
+# Puts contents of manifest directory into iRODS
+def pushManifest(exp_id, manifestLocation, slicename):
+    directory_name='manifest_rspec'
+    os.chdir(manifestLocation)
+    #manifestLocation=manifestLocation[:-1]
+    #saves contents of manifestLocation directory folder as string
+    files=subprocess.check_output(['ls'])
+    #saves file names from manifestLocation into array
+    manifests=files.split('\n')
+    subprocess.check_output(['icd'])
+    if manifests==['']:
+        print "WARNING: No manifest rspecs were found."
+        return
+    #adds first manifest rspec and creates descriptor files
+    addArtifact(exp_id, manifests[0], manifestLocation, 'obtain_resources', 'slice', slicename, 'GENI_AM_API_sliver_manifest_rspec', 'interpretation_read_me', directory_name)
+    manifests=manifests[1:-1]
+    #adds remaining manifest rspecs
+    for rspec in manifests:
+        addAnotherArtifact(rspec, manifestLocation, exp_id+"/"+directory_name+"-1")
+    print "Manifest has been pushed to iRODS\n"
+
+
+
+########## TICKETS ##########
+    
+# Creates tickets for the experiment directory taking in user restrictions & an expiration time
+def makeTicket(exp_id, users=None, expire_time=0):
+    ticket = subprocess.check_output(['iticket', 'create', 'write', exp_id])
+    ticket = ticket.replace("ticket:","")
+    ticket = ticket.replace("\n","")
+    print "Ticket for new directory: " + ticket
+    subprocess.check_output(['iticket', 'mod', ticket, 'write-files', '0'])
+    # Restricts users
+    if users is None:
+        users=[]
+    for x in users:
+        subprocess.check_output(['iticket', 'mod', ticket, 'add', 'user', x])
+    # Sets expiration time
+    if expire_time != 0:
+        extendTicket(ticket, expire_time)
+    return ticket 
+
+# Postpones the time at which the iticket expires.
+# expire_time must be UNIX timestamp
+def extendTicket(ticket, expire_time):
+    subprocess.check_output(['iticket', 'mod', ticket, 'expire', expire_time])
+    print "Ticket expiration date is set to: " + expire_time
+    return ticket
+
+# Adds user to list of users with access to ticket
+def addTicketUser (ticket, user):
+    subprocess.check_output(['iticket', 'mod', ticket, 'add', 'user', user])
+    print "Ticket access granted to: " + user
+    return ticket
+####################################
+
+

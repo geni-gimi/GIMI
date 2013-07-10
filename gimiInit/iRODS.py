@@ -66,77 +66,6 @@ class iRODS:
         subprocess.check_output(['icd'])
 
 
-########## ARTIFACTS ##########
-
-    # Adds a new artifact with descriptor files to this experiment directory
-    def addArtifact(self, artifact, artifactLocation, prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me, directory_name=None):
-        self.makeArtAndStepFiles(artifactLocation, prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me)
-        self.makeArtifactDirectory(artifact,artifactLocation, directory_name)
-
-    # Adds a new artifact to a specified arifact directory
-    def addAnotherArtifact(self, artifact, artifactLocation, directory_name):
-        subprocess.check_output(['icd'])
-        subprocess.check_output(['icd', directory_name])
-        subprocess.check_output(['iput', artifactLocation+'/'+artifact, '-r'])
-        subprocess.check_output(['icd'])
-        
-
-    # Builds Artifact & Step XML files and writes them to files
-    def makeArtAndStepFiles(self, artifactLocation, prime_function, resource_type, resource_id, art_type_prime, interpretation_read_me):
-        # makes step XML file
-        newStep = simpleStep.Step(prime_function, resource_type, resource_id)
-        newStep.makeXML(artifactLocation)
-        # makes artifact XML file
-        newArtifact = simpleArtifact.Artifact(art_type_prime, interpretation_read_me)
-        newArtifact.makeXML(artifactLocation)
-
-    # Creates all directories within iRODS for this experiment and put XML files into iRODS
-    def makeArtifactDirectory(self, artifact, artifactLocation, directory_name):
-        subprocess.check_output(['icd'])
-        subprocess.check_output(['icd', self.exp_id])
-        # name directory uniquely
-        if directory_name==None:
-            directory_name = artifact
-        run=1
-        directory_name_run = directory_name+'-'+str(run)
-        newDirectory=False
-        while newDirectory==False :
-            try:
-                subprocess.check_output(['imkdir', directory_name_run])
-                newDirectory=True
-                break
-            except:
-                run+=1
-                directory_name_run = directory_name+'-'+str(run)
-        subprocess.check_output(['icd', directory_name_run])
-        #add artifact & xml files to directory
-        subprocess.check_output(['iput', artifactLocation+'/'+artifact, '-r'])
-        subprocess.check_output(['iput', artifactLocation+'/step.xml'])
-        subprocess.check_output(['iput', artifactLocation+'/artifact.xml'])
-        subprocess.check_output(['icd'])
-
-    
-    # Puts contents of manifest directory into iRODS
-    def pushManifest(self, manifestLocation, slicename):
-        directory_name='manifest_rspec'
-        os.chdir(manifestLocation)
-        #manifestLocation=manifestLocation[:-1]
-        #saves contents of manifestLocation directory folder as string
-        files=subprocess.check_output(['ls'])
-        #saves file names from manifestLocation into array
-        manifests=files.split('\n')
-        subprocess.check_output(['icd'])
-        if manifests==['']:
-            print "WARNING: No manifest rspecs were found."
-            return
-        #adds first manifest rspec and creates descriptor files
-        self.addArtifact(manifests[0], manifestLocation, 'obtain_resources', 'slice', slicename, 'GENI_AM_API_sliver_manifest_rspec', 'interpretation_read_me', directory_name)
-        manifests=manifests[1:-1]
-        #adds remaining manifest rspecs
-        for rspec in manifests:
-            self.addAnotherArtifact(rspec, manifestLocation, self.exp_id+"/"+directory_name+"-1")
-        print "Manifest has been pushed to iRODS\n"
-
 
     # Puts intial OMF scripts into iRODS
     def pushOMFs(self):
@@ -153,39 +82,6 @@ class iRODS:
             subprocess.check_output(['icd'])
             print "OMF template scripts have been pushed to iRODS\n"
 
-      
-########## TICKETS ##########
-    
-    # Creates tickets for the experiment directory taking in user restrictions & an expiration time
-    def makeTicket(self, users=None, expire_time=0):
-        ticket = subprocess.check_output(['iticket', 'create', 'write', self.exp_id])
-        ticket = ticket.replace("ticket:","")
-        ticket = ticket.replace("\n","")
-        print "Ticket for new directory: " + ticket
-        # Restricts users
-        if users is None:
-            users=[]
-        for x in users:
-            subprocess.check_output(['iticket', 'mod', ticket, 'add', 'user', x])
-        # Sets expiration time
-        if expire_time != 0:
-            self.extendTicket(ticket, expire_time)
-        return ticket 
-
-    # Postpones the time at which the iticket expires.
-    # expire_time must be UNIX timestamp
-    def extendTicket(self, ticket, expire_time):
-        subprocess.check_output(['iticket', 'mod', ticket, 'expire', expire_time])
-        print "Ticket expiration date is set to: " + expire_time
-        return ticket
-
-    # Adds user to list of users with access to ticket
-    def addTicketUser (self, ticket, user):
-        subprocess.check_output(['iticket', 'mod', ticket, 'add', 'user', user])
-        print "Ticket access granted to: " + user
-        return ticket
-  ####################################
-        
 
 
 #### TEST CODE ####
