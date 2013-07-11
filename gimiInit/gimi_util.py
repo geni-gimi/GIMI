@@ -57,30 +57,55 @@ def get_user(theOutput):
 def listmyslices_output_parse(theOutput):
     moreSlices=True
     slices=[]
-    projects = []
     authorities = []
-    while(moreSlices==True):
-        indexOfURN=theOutput.find('urn:')
-        theOutput=theOutput[indexOfURN:]
-        indexOfLineEnd=theOutput[2:].find('urn:')
-        if indexOfLineEnd==-1:
-            moreSlices=False
-            indexOfLineEnd=theOutput[1:].find('INFO:omni')
-        urnInfo=theOutput[:indexOfLineEnd]
-
-        info=urnInfo.split(":")
-        auth=info[2].split('+')
-        proj_authority=auth[1]
-        x=info[3].split('+')
+    # for geni ch portal account
+    
+    if "ch.geni.net" in theOutput:
+        projects = []
+        while(moreSlices==True):
+            indexOfURN=theOutput.find('urn:')
+            theOutput=theOutput[indexOfURN:]
+            indexOfLineEnd=theOutput[2:].find('urn:')
+            if indexOfLineEnd==-1:
+                moreSlices=False
+                indexOfLineEnd=theOutput[1:].find('INFO:omni')
+            urnInfo=theOutput[:indexOfLineEnd]
+    
+            info=urnInfo.split(":")
+            auth=info[2].split('+')
+            proj_authority=auth[1]
+            x=info[3].split('+')
+            
+            projectID=x[0]            ## project is the name of your project
+            slicename=x[2]            ## slicename is the name of your slice
+            slices.append(slicename)
+            projects.append(projectID)
+            authorities.append(proj_authority)
+            theOutput=theOutput[indexOfLineEnd-1:]
+    #    slices = rev_slices[::-1]
+        return authorities, projects, slices
+    
+    elif "pgeni" in theOutput:
+        # for pgeni account    
+        while(moreSlices==True):
+            indexOfURN=theOutput.find('urn:')
+            theOutput=theOutput[indexOfURN:]
+            indexOfLineEnd=theOutput[2:].find('urn:')
+            if indexOfLineEnd==-1:
+                moreSlices=False
+                indexOfLineEnd=theOutput[1:].find('INFO:omni')
+            urnInfo=theOutput[:indexOfLineEnd]
         
-        projectID=x[0]            ## project is the name of your project
-        slicename=x[2]            ## slicename is the name of your slice
-        slices.append(slicename)
-        projects.append(projectID)
-        authorities.append(proj_authority)
-        theOutput=theOutput[indexOfLineEnd-1:]
-#    slices = rev_slices[::-1]
-    return authorities, projects, slices
+            info=urnInfo.split("+")
+            proj_authority = info[1]
+            slicename=info[3]
+            
+            slices.append(slicename)
+            authorities.append(proj_authority)
+            theOutput=theOutput[indexOfLineEnd-1:]
+    #    slices = rev_slices[::-1]
+        return authorities, "pgeni-project", slices
+
 
 def getRspecs(output):
     theOutput=output
@@ -198,6 +223,7 @@ def getExpire(slicename, project):
 def getRspec(slicename, project, manifest_workdirectory, manifestName):
     print "Checking resources from aggregates... (this might take some time)"
     aggregates = ['https://pgeni.gpolab.bbn.com:12369/protogeni/xmlrpc/am/2.0', 'https://www.emulab.net:12369/protogeni/xmlrpc/am/2.0', 'https://www.uky.emulab.net:12369/protogeni/xmlrpc/am/2.0', 'https://bbn-hn.exogeni.net:11443/orca/xmlrpc', 'https://rci-hn.exogeni.net:11443/orca/xmlrpc', 'https://geni.renci.org:11443/orca/xmlrpc', 'https://boss.utah.geniracks.net:12369/protogeni/xmlrpc/am/2.0', 'https://boss.instageni.gpolab.bbn.com:12369/protogeni/xmlrpc/am/2.0', 'https://boss.lan.sdn.uky.edu:12369/protogeni/xmlrpc/am/2.0', 'https://geni.kettering.edu:12369/protogeni/xmlrpc/am', 'https://instageni.northwestern.edu:12369/protogeni/xmlrpc/am']
+    
     for am in aggregates:
         bigString = "--outputfile=" + manifest_workdirectory + "/" + am + "-" + manifestName
 
@@ -208,8 +234,8 @@ def getRspec(slicename, project, manifest_workdirectory, manifestName):
         else:
             p= subprocess.Popen(['omni.py', 'listresources', slicename, '-r', project, '-a', am, '-o', bigString], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output, errors = p.communicate()
-            print ("Found resource in aggregate: " + am + ", manifest stored as " + manifest_workdirectory + "/" + am + "-" + manifestName)
-
+#            print ("Found resource in aggregate: " + am + ", manifest stored as " + manifest_workdirectory + "/" + am + "-" + manifestName)
+            print ("Found resource in aggregate: " + am)
 
 #Check iRODS environment settings
 def ienvParse():
