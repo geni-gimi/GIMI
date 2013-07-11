@@ -223,12 +223,14 @@ def getExpire(slicename, project):
 def getRspec(slicename, project, manifest_workdirectory, manifestName):
     print "Checking resources from aggregates... (this might take some time)"
     aggregates = ['https://pgeni.gpolab.bbn.com:12369/protogeni/xmlrpc/am/2.0', 'https://www.emulab.net:12369/protogeni/xmlrpc/am/2.0', 'https://www.uky.emulab.net:12369/protogeni/xmlrpc/am/2.0', 'https://bbn-hn.exogeni.net:11443/orca/xmlrpc', 'https://rci-hn.exogeni.net:11443/orca/xmlrpc', 'https://geni.renci.org:11443/orca/xmlrpc', 'https://boss.utah.geniracks.net:12369/protogeni/xmlrpc/am/2.0', 'https://boss.instageni.gpolab.bbn.com:12369/protogeni/xmlrpc/am/2.0', 'https://boss.lan.sdn.uky.edu:12369/protogeni/xmlrpc/am/2.0', 'https://geni.kettering.edu:12369/protogeni/xmlrpc/am', 'https://instageni.northwestern.edu:12369/protogeni/xmlrpc/am']
-    
+    amNicknames=['pg-gpo', 'pg-utah', 'pg-ky', 'eg-gpo', 'eg-renci', 'eg-exosm', 'ig-utah', 'ig-gpo', 'ig-ky', 'ig-kettering', 'ig-northwestern']
+    i=0
     for am in aggregates:
-        bigString = "--outputfile=" + manifest_workdirectory + "/" + am + "-" + manifestName
+        bigString = "--outputfile=" + manifest_workdirectory + "/" + amNicknames[i] + "-" + manifestName
 
         checkOutput = subprocess.Popen(['omni.py', 'listresources', slicename, '-r', project, '-a', am], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         checkOut, checkErrors = checkOutput.communicate()
+        i+=1
         if "No resource listing returned" in checkErrors:
             continue
         else:
