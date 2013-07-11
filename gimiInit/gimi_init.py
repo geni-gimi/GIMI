@@ -29,6 +29,11 @@ import omni
 
 # Set up working directory
 print("Welcome to the GIMI initialization script, please make sure to install omni and set up your credential before running this script")
+p = subprocess.Popen(['omni.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+omniOut, omniErrors = p.communicate()
+if "ERROR:omni: Could not find an omni configuration file in local directory" in omniErrors:
+    print omniErrors
+    sys.exit(1)
 
 while True:
     newExpOption = raw_input("Are you creating a new experiment? \n")
