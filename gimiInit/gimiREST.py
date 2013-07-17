@@ -21,10 +21,11 @@ class REST:
         self.postUser()
         self.postExperiment()
         self.postSlice()
+        print("Values:" + user_name + ' ' + proj_name + ' ' +  exp_name + ' ' + itkt_token + ' ' + irods_path + ' ' + slice_name + ' ' )
         print('Pushed data to registry successfully\n')
 
     def postProject(self):
-        data = {'name': self.proj_name}
+        data = [{'name': self.proj_name}]
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'} 
         #data=json.dumps(data)
         json_filename = self.workdirectory + "/proj.json"
@@ -37,7 +38,7 @@ class REST:
         os.system('curl -X POST -H "Content-Type: application/json" --data-binary @'+ json_filename +' ' + self.restURL + ':' + str(self.restPort) + '/projects')
 
     def postExperiment(self):
-        data = {'name': self.exp_name,'iticket' : {'token': self.itkt_token, 'path': self.irods_path, 'created_at': self.itkt_create, 'valid_until': self.itkt_valid}}
+        data = [{'name': self.exp_name,'iticket' :{'token': self.itkt_token, 'path': self.irods_path, 'created_at': self.itkt_create, 'valid_until': self.itkt_valid}}]
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'} 
         #data=json.dumps(data)
         json_filename = self.workdirectory + "/experiment.json"
@@ -50,7 +51,7 @@ class REST:
         os.system('curl -X POST -H "Content-Type: application/json" --data-binary @'+ json_filename +' ' + self.restURL + ':' + str(self.restPort) + '/projects/' + self.proj_name + '/experiments')
    
     def postSlice(self):
-        data = {'name': self.slice_name,'manifest': self.manifest}
+        data = [{'name': self.slice_name,'manifest': self.manifest}]
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'} 
         #data=json.dumps(data)
         json_filename = self.workdirectory + "/slice.json"
@@ -63,7 +64,7 @@ class REST:
         os.system('curl -X POST -H "Content-Type: application/json" --data-binary @'+ json_filename +' ' + self.restURL + ':' + str(self.restPort) + '/projects/' + self.proj_name + '/experiments/' + self.exp_name + '/slices')
 
     def postUser(self):
-        data = {'name': self.user_name}
+        data = [{'name': "geni-" + self.user_name}]
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
         #data=json.dumps(data)
         json_filename = self.workdirectory + "/user.json"
