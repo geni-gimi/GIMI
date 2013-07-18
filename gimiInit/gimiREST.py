@@ -51,7 +51,7 @@ class REST:
         os.system('curl -X POST -H "Content-Type: application/json" --data-binary @'+ json_filename +' ' + self.restURL + ':' + str(self.restPort) + '/projects/' + self.proj_name + '/experiments')
    
     def postSlice(self):
-        data = [{'name': self.slice_name, 'urn': self.slice_urn,'manifest': self.manifest}]
+        data = [{'name': self.slice_name, 'urn': self.slice_name,'manifest': self.manifest}]
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'} 
         #data=json.dumps(data)
         json_filename = self.workdirectory + "/slice.json"
