@@ -219,4 +219,4 @@ manifest = manifestName + ".xml"
 irodsHome = gimi_util.ienvParse()
 
 irods_path = irodsHome + "/manifests-" + expTime
-restInt = gimiREST.REST("http://emmy9.casa.umass.edu", "8002", workdirectory, username, projectID, expId, myTicket, irods_path, itkt_create_time, sliceExpTime, slicename, sliceurn, manifest)
+restInt = gimiREST.REST("http://emmy9.casa.umass.edu", "8002", workdirectory, username, projectID, expId, myTicket, irods_path, itkt_create_time, sliceExpTime, slicename, manifest)
