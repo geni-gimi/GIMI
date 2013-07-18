@@ -3,7 +3,7 @@ import sys
 import os
 
 class REST:
-    def __init__(self, restURL, restPort, workdirectory, user_name, proj_name, exp_name, itkt_token, irods_path, itkt_create, itkt_valid, slice_name, slice_urn, manifest):
+    def __init__(self, restURL, restPort, workdirectory, user_name, proj_name, exp_name, itkt_token, irods_path, itkt_create, itkt_valid, slice_name, manifest):
         self.restURL = restURL
         self.restPort = restPort
         self.workdirectory = workdirectory
@@ -15,7 +15,6 @@ class REST:
         self.itkt_create = itkt_create
         self.itkt_valid = itkt_valid
         self.slice_name = slice_name
-        self.slice_urn = slice_urn
         self.manifest = manifest
 
         self.postProject()
