@@ -1,6 +1,7 @@
 import json
 import sys
 import os
+import uuid
 
 class REST:
     def __init__(self, restURL, restPort, workdirectory, user_name, proj_name, exp_name, itkt_token, irods_path, itkt_create, itkt_valid, slice_name, manifest):
@@ -25,7 +26,8 @@ class REST:
         print('Pushed data to registry successfully\n')
 
     def postProject(self):
-        data = [{'name': self.proj_name}]
+        UUID = uuid.uuid3(uuid.NAMESPACE_DNS, self.proj_name)
+        data = [{'name': self.proj_name, 'uuid': str(UUID)}]
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'} 
         #data=json.dumps(data)
         json_filename = self.workdirectory + "/proj.json"
@@ -38,7 +40,8 @@ class REST:
         os.system('curl -X POST -H "Content-Type: application/json" --data-binary @'+ json_filename +' ' + self.restURL + ':' + str(self.restPort) + '/projects')
 
     def postExperiment(self):
-        data = [{'name': self.exp_name,'iticket' :{'token': self.itkt_token, 'path': self.irods_path, 'created_at': self.itkt_create, 'valid_until': self.itkt_valid}}]
+        UUID = uuid.uuid3(uuid.NAMESPACE_DNS, self.exp_name)
+        data = [{'name': self.exp_name,'uuid': str(UUID), 'iticket' :{'token': self.itkt_token, 'path': self.irods_path, 'created_at': self.itkt_create, 'valid_until': self.itkt_valid}}]
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'} 
         #data=json.dumps(data)
         json_filename = self.workdirectory + "/experiment.json"
@@ -51,7 +54,8 @@ class REST:
         os.system('curl -X POST -H "Content-Type: application/json" --data-binary @'+ json_filename +' ' + self.restURL + ':' + str(self.restPort) + '/projects/' + self.proj_name + '/experiments')
    
     def postSlice(self):
-        data = [{'name': self.slice_name, 'urn': self.slice_name,'manifest': self.manifest}]
+        UUID = uuid.uuid3(uuid.NAMESPACE_DNS, self.slice_name)
+        data = [{'name': self.slice_name,'uuid': str(UUID), 'urn': self.slice_name,'manifest': self.manifest}]
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'} 
         #data=json.dumps(data)
         json_filename = self.workdirectory + "/slice.json"
@@ -64,7 +68,9 @@ class REST:
         os.system('curl -X POST -H "Content-Type: application/json" --data-binary @'+ json_filename +' ' + self.restURL + ':' + str(self.restPort) + '/projects/' + self.proj_name + '/experiments/' + self.exp_name + '/slices')
 
     def postUser(self):
-        data = [{'name': "geni-" + self.user_name}]
+        x="geni-" + self.user_name
+        UUID = uuid.uuid3(uuid.NAMESPACE_DNS, x)
+        data = [{'name': "geni-" + self.user_name, 'uuid': str(UUID)}]
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
         #data=json.dumps(data)
         json_filename = self.workdirectory + "/user.json"
