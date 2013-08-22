@@ -106,7 +106,25 @@ def listmyslices_output_parse(theOutput):
     #    slices = rev_slices[::-1]
         return authorities, "pgeni-project", slices
 
+def getSlices(slicename, theOutput):
+    moreSlices=True
+    giveurn="nil"
+    while(moreSlices==True):
+        indexOfURN=theOutput.find('urn:')
+        theOutput=theOutput[indexOfURN:]
+        indexOfLineEnd=theOutput[2:].find('urn:')
 
+        if indexOfLineEnd==-1:
+            moreSlices=False
+            indexOfLineEnd=theOutput[1:].find('INFO:omni')
+        urnInfo=theOutput[:indexOfLineEnd]
+        if slicename in urnInfo:
+            giveurn=urnInfo
+            break
+            print("URN Found\n")
+        else:
+            theOutput=theOutput[indexOfLineEnd-1:]
+    return giveurn
 def getRspecs(output):
     theOutput=output
     indexOfRspec=0

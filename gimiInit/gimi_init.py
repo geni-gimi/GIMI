@@ -75,7 +75,7 @@ while True:
                 break
             else:
                 slicename = raw_input("Please only enter the slice names listed above: \n")
-        
+
         projectName = raw_input("Please enter your project name: \n")
         expList = gimiRest_GET.getExperiment("http://emmy9.casa.umass.edu", "8002", projectName)
         print("Your existing experiments: \n")
@@ -161,6 +161,8 @@ slicename = raw_input("Your active slice names:\n" + slicename + "\nPlease enter
 
 while True:
     if slicename in returned_slicename:
+        sliceurn = gimi_util.getSlices(slicename, listmyslicesErrors)
+        print("SliceURN is: " + str(sliceurn) + "\n")
         break
     else:
         slicename = raw_input("Please only enter the slice names listed above: \n")
